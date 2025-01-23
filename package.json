@@ -1,0 +1,14 @@
+{
+  "name": "planyourwealth",
+  "version": "1.0.0",
+  "description": "Plan your financial future",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd front-end && npm i && npm run build",
+    "start": "cd back-end && npm i && npm start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

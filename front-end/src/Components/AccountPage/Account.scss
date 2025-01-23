@@ -1,0 +1,128 @@
+$small-mobile: 400px;
+$medium-mobile: 500px;
+$large-mobile: 600px;
+
+$small-desktop: 800px;
+$medium-desktop: 1000px;
+$large-desktop: 1200px;
+
+.account-container {
+  width: 95%;
+  height: 95%;
+  margin: 0 auto;
+  margin-top: 1em;
+
+  .account-content {
+    .account-settings-container {
+      display: flex;
+      flex-direction: column;
+      height: 75dvh;
+
+      .account-settings-form {
+        height: 100%;
+        width: 50%;
+        margin: 0 auto;
+
+        .account-settings-user-profileimg-container {
+          display: grid;
+          grid-template-columns: 125px 1fr 100px;
+          gap: 0.3em;
+
+          #account-settings-user-profileimg {
+            width: 150px;
+          }
+        }
+
+        .account-settings-buttons {
+          display: flex;
+          justify-content: space-around;
+        }
+      }
+    }
+  }
+
+  .auth-container {
+    width: 30%;
+
+    .switch-auth-mode {
+      color: #0a58ca;
+      margin-top: 1em;
+      text-decoration: underline;
+
+      &:hover {
+        cursor: pointer;
+        color: #3370ca;
+      }
+    }
+  }
+}
+
+.form-input {
+  display: grid;
+  grid-template-columns: 125px 1fr;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  margin-bottom: 0.5em;
+}
+
+@media screen and (max-width: 799px) {
+  .account-container {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    margin-top: 1em;
+
+    .account-content {
+      .account-settings-container {
+        display: flex;
+        flex-direction: column;
+
+        .account-settings-form {
+          height: 100%;
+          width: 85%;
+          margin: 0 auto;
+
+          .account-settings-user-profileimg-container {
+            display: grid;
+            grid-template-columns: 125px 1fr 100px;
+            gap: 0.3em;
+
+            #account-settings-user-profileimg {
+              width: 150px;
+            }
+          }
+
+          .account-settings-buttons {
+            display: flex;
+            justify-content: space-around;
+          }
+        }
+      }
+    }
+
+    .auth-container {
+      width: 30%;
+
+      .switch-auth-mode {
+        color: #0a58ca;
+        margin-top: 1em;
+        text-decoration: underline;
+
+        &:hover {
+          cursor: pointer;
+          color: #3370ca;
+        }
+      }
+    }
+  }
+
+  .form-input {
+    display: grid;
+    grid-template-columns: 125px 1fr;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    margin-bottom: 0.5em;
+  }
+}
