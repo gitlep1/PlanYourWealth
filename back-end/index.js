@@ -8,7 +8,12 @@ require("dotenv").config();
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:5173", "http://localhost:4000"];
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:4000",
+  "https://plan-your-wealth.vercel.app",
+  "https://plan-your-wealth-api.vercel.app",
+];
 
 app.use(
   cors({
@@ -22,12 +27,6 @@ app.use(
     },
   })
 );
-
-app.use((req, res, next) => {
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
-  next();
-});
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", req.headers.origin);
@@ -50,7 +49,7 @@ app.get("*", (req, res) => {
   res.status(404).send("404 Not Found!");
 });
 
-const PORT = 4000 || process.env.PORT;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`PlanYourWealth listening on port ${PORT}`);
 });
