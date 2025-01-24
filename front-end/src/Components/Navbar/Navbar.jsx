@@ -22,7 +22,7 @@ export const Navbar = () => {
 
   const { themeState, setThemeState } = useContext(themeContext);
   const { authUser, setAuthUser } = useContext(userContext);
-  const { authToken, setAuthToken } = useContext(tokenContext);
+  const { setAuthToken } = useContext(tokenContext);
 
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -53,41 +53,32 @@ export const Navbar = () => {
     };
 
     if (isSignin) {
-      try {
-        await axios
-          .post(`${API}/users/signin`, userData)
-          .then((res) => {
-            toast.success(
-              `Welcome ${res.data.payload.username}, You have been signed in successfully.`,
-              {
-                containerId: "toast-notify",
-              }
-            );
-            setAuthUser(res.data.payload);
-            setAuthToken(res.data.token);
+      await axios
+        .post(`${API}/users/signin`, userData)
+        .then((res) => {
+          toast.success(
+            `Welcome ${res.data.payload.username}, You have been signed in successfully.`,
+            {
+              containerId: "toast-notify",
+            }
+          );
+          setAuthUser(res.data.payload);
+          setAuthToken(res.data.token);
 
-            SetCookies("authUser", res.data.payload, "30d");
-            SetCookies("authToken", res.data.token, "30d");
+          SetCookies("authUser", res.data.payload, "30d");
+          SetCookies("authToken", res.data.token, "30d");
 
-            handleClose();
+          handleClose();
 
-            setTimeout(() => {
-              navigate("/");
-            }, 5000);
-          })
-          .catch((error) => {
-            return toast.error(
-              `Sign in failed: ${error.response.data.message}`,
-              {
-                containerId: "toast-notify",
-              }
-            );
+          setTimeout(() => {
+            navigate("/");
+          }, 5000);
+        })
+        .catch((error) => {
+          return toast.error(`Sign in failed: ${error.response.data}`, {
+            containerId: "toast-notify",
           });
-      } catch (error) {
-        return toast.error(`Sign in failed: ${error.response.data.message}`, {
-          containerId: "toast-notify",
         });
-      }
     } else {
       if (password !== confirmPassword) {
         return toast.error("Passwords do not match", {
@@ -95,41 +86,32 @@ export const Navbar = () => {
         });
       }
 
-      try {
-        await axios
-          .post(`${API}/users/signup`, userData)
-          .then((res) => {
-            toast.success(
-              `Welcome ${res.data.payload.username}, You have been signed up successfully.`,
-              {
-                containerId: "toast-notify",
-              }
-            );
-            setAuthUser(res.data.payload);
-            setAuthToken(res.data.token);
+      await axios
+        .post(`${API}/users/signup`, userData)
+        .then((res) => {
+          toast.success(
+            `Welcome ${res.data.payload.username}, You have been signed up successfully.`,
+            {
+              containerId: "toast-notify",
+            }
+          );
+          setAuthUser(res.data.payload);
+          setAuthToken(res.data.token);
 
-            SetCookies("authUser", res.data.payload, "30d");
-            SetCookies("authToken", res.data.token, "30d");
+          SetCookies("authUser", res.data.payload, "30d");
+          SetCookies("authToken", res.data.token, "30d");
 
-            handleClose();
+          handleClose();
 
-            setTimeout(() => {
-              navigate("/");
-            }, 5000);
-          })
-          .catch((error) => {
-            return toast.error(
-              `Sign up failed: ${error.response.data.message}`,
-              {
-                containerId: "toast-notify",
-              }
-            );
+          setTimeout(() => {
+            navigate("/");
+          }, 5000);
+        })
+        .catch((error) => {
+          return toast.error(`Sign up failed: ${error.response.data.message}`, {
+            containerId: "toast-notify",
           });
-      } catch (error) {
-        return toast.error(`Sign up failed: ${error.response.data.message}`, {
-          containerId: "toast-notify",
         });
-      }
     }
   };
 
