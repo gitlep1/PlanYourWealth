@@ -1,6 +1,9 @@
 import Cookies from "js-cookie";
 
-const SetCookies = (name, data, expirationDate) => {
+const SetCookies = (name, data, expirationDuration) => {
+  const expirationDate = new Date();
+  expirationDate.setDate(expirationDate.getDate() + expirationDuration);
+
   Cookies.set(name, JSON.stringify(data), {
     expires: expirationDate,
     path: "/",

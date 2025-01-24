@@ -1,5 +1,6 @@
 import "./Notfound.scss";
 import { useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 export const Notfound = () => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ export const Notfound = () => {
       <div className="notfound-content">
         <h1>404</h1>
         <h2>Page Not Found</h2>
-        <button onClick={() => navigate("/")}>Back to Homepage</button>
+        <Button onClick={() => navigate("/")}>Back to Homepage</Button>
       </div>
     </section>
   );

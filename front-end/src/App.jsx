@@ -1,6 +1,7 @@
 import "./App.scss";
 import { useState, useEffect, useContext } from "react";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 import {
   screenVersionContext,
@@ -16,6 +17,8 @@ import { Navbar } from "./Components/Navbar/Navbar";
 import { Desktop } from "./Components/Desktop/Desktop";
 import { Mobile } from "./Components/Mobile/Mobile";
 
+const API = import.meta.env.VITE_API_URL;
+
 const App = () => {
   const screenVersion = useContext(screenVersionContext);
   const { themeState } = useContext(themeContext);
@@ -23,7 +26,7 @@ const App = () => {
   const { setAuthToken } = useContext(tokenContext);
 
   const userData = Cookies.get("authUser") || null;
-  const tokenData = Cookies.get("token") || null;
+  const tokenData = Cookies.get("authToken") || null;
 
   const [screenSize, setScreenSize] = useState(DetectScreenSize().width);
 
@@ -46,18 +49,30 @@ const App = () => {
   }, []); // eslint-disable-line
 
   const handleReauthUser = () => {
-    if (
-      userData !== "undefined" &&
-      userData !== null &&
-      tokenData !== "undefined" &&
-      tokenData !== null
-    ) {
-      setAuthUser(JSON.parse(userData));
-      setAuthToken(JSON.parse(tokenData));
+    if (tokenData !== "undefined" && tokenData !== null) {
+      getUserData();
     } else {
       setAuthUser(null);
       setAuthToken(null);
     }
+  };
+
+  const getUserData = async () => {
+    const token = JSON.parse(tokenData);
+
+    await axios
+      .get(`${API}/users/user`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setAuthUser(res.data.payload);
+        setAuthToken(res.data.token);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const resizeSidebar = () => {
