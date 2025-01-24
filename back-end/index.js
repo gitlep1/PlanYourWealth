@@ -1,19 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 
-const usersController = require("./Controllers/usersController");
 const googleAuth = require("./Validation/googleAuthValidation");
+const usersController = require("./Controllers/usersController");
 
 require("dotenv").config();
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:4000",
-  "https://react-calculator-frontend.vercel.app",
-  "https://react-calculator-backend.vercel.app",
-];
+const allowedOrigins = ["http://localhost:5173", "http://localhost:4000"];
 
 app.use(
   cors({
@@ -48,7 +43,7 @@ app.use("/auth", googleAuth);
 app.use("/users", usersController);
 
 app.get("/", (req, res) => {
-  res.send("Welcome to React Calculator App's Server");
+  res.send("Welcome to PlanYourWealth Server");
 });
 
 app.get("*", (req, res) => {

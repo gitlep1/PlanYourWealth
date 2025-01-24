@@ -1,4 +1,18 @@
 {
+  "name": "back-end",
+  "description": "The backend to PlanYourWealth",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dbinit": "psql -U postgres -f db/schema.sql",
+    "dbseed": "psql -U postgres -f db/seed.sql",
+    "start": "nodemon index.js"
+  },
+  "keywords": [
+    "Finances"
+  ],
+  "author": "gitlep1",
+  "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
