@@ -1,6 +1,6 @@
 import "./Mobile.scss";
 import { Routes, Route } from "react-router-dom";
-import { elastic as SidebarMenu } from "react-burger-menu";
+// import { elastic as SidebarMenu } from "react-burger-menu";
 
 import { Sidebar } from "../Sidebar/Sidebar";
 import { Homepage } from "../HomePage/Homepage";
@@ -12,7 +12,7 @@ export const Mobile = ({ handleSidebarOpen, isOpen, resize }) => {
   return (
     <section className="mobile-container">
       <div className="mobile-content">
-        <SidebarMenu
+        {/* <SidebarMenu
           outerContainerId={"mobile-outer-container"}
           pageWrapId={"mobile-page-wrap"}
           isOpen={isOpen}
@@ -23,7 +23,7 @@ export const Mobile = ({ handleSidebarOpen, isOpen, resize }) => {
           id="mobile-sidebarmenu"
         >
           <Sidebar />
-        </SidebarMenu>
+        </SidebarMenu> */}
 
         <main id="mobile-page-wrap">
           <Routes>

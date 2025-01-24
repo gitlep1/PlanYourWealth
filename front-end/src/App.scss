@@ -1,4 +1,16 @@
-.App {
+.app {
   width: 100%;
   height: 100%;
+}
+
+.darkmode {
+  color: whitesmoke;
+  background-color: #242424;
+  transition: 1s;
+}
+
+.lightmode {
+  color: black;
+  background-color: #dcdcdc;
+  transition: 1s;
 }

@@ -1,6 +1,6 @@
 import "./Desktop.scss";
 import { Routes, Route } from "react-router-dom";
-import { scaleDown as SidebarMenu } from "react-burger-menu";
+// import { scaleDown as SidebarMenu } from "react-burger-menu";
 
 import { Sidebar } from "../Sidebar/Sidebar";
 import { Homepage } from "../HomePage/Homepage";
@@ -12,7 +12,7 @@ export const Desktop = ({ handleSidebarOpen, isOpen, resize }) => {
   return (
     <section className="desktop-container">
       <div className="desktop-content">
-        <SidebarMenu
+        {/* <SidebarMenu
           outerContainerId={"desktop-outer-container"}
           pageWrapId={"desktop-page-wrap"}
           isOpen={isOpen}
@@ -23,7 +23,7 @@ export const Desktop = ({ handleSidebarOpen, isOpen, resize }) => {
           id="desktop-sidebarmenu"
         >
           <Sidebar />
-        </SidebarMenu>
+        </SidebarMenu> */}
 
         <main id="desktop-page-wrap">
           <Routes>

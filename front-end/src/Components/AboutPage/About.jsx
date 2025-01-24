@@ -5,29 +5,32 @@ export const About = () => {
     <div className="about-container">
       <h1>About</h1>
       <p>
-        Welcome to the Calcutor! This project is designed to meet your
-        calculation needs by offering both a **Basic Calculator** and a
-        **Scientific Calculator**. Whether you need quick arithmetic operations
-        or advanced mathematical functions, this app has you covered.
+        Welcome to PlanYourWealth! This project is designed to empower you to
+        take control of your finances by offering features for **budget
+        management**, **expense tracking**, and **investment planning**. Whether
+        you&apos;re working to save more or seeking personalized investment
+        recommendations, PlanYourWealth has you covered.
       </p>
       <p>
-        The **Basic Calculator** provides a simple and user-friendly interface
-        for everyday calculations like addition, subtraction, multiplication,
-        and division. The **Scientific Calculator**, on the other hand, includes
-        advanced features such as trigonometric functions, logarithms, and power
-        calculations, making it suitable for students, professionals, and anyone
-        tackling complex mathematical problems.
+        The **Budgeting Tool** provides a simple and intuitive interface to help
+        you track your income and expenses, set spending limits, and visualize
+        your financial health. The **Investment Recommendation Engine**, on the
+        other hand, uses intelligent algorithms to suggest personalized
+        investment options tailored to your goals, risk tolerance, and financial
+        situation.
       </p>
       <p>
-        Built with React.js and styled using modern SCSS, this app is partially
-        responsive and partially optimized for use on both desktop and mobile
-        devices. It showcases essential React concepts such as component-based
-        architecture, state management, and event handling.
+        Built with React.js and styled using modern SCSS, PlanYourWealth is
+        fully responsive and optimized for both desktop and mobile devices. It
+        showcases essential React concepts such as component-based architecture,
+        state management, and API integration, ensuring a seamless and efficient
+        user experience.
       </p>
       <p>
-        I hope this app enhances your productivity and provides an enjoyable
-        user experience. Feel free to explore, provide feedback, or contribute
-        to its development. Thank you for choosing Calcutor!
+        I hope PlanYourWealth helps you achieve your financial goals and
+        inspires confidence in managing your money. Feel free to explore, share
+        feedback, or contribute to its ongoing development. Thank you for
+        choosing PlanYourWealth!
       </p>
     </div>
   );
