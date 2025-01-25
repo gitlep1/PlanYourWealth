@@ -13,7 +13,7 @@ import {
   tokenContext,
 } from "../../CustomContexts/Contexts";
 import { SetCookies } from "../../CustomFunctions/HandleCookies";
-import PlanYourWealthImage from "../../images/PlanYourWealth-Icon.png";
+import PlanYourWealthImage from "../../Images/PlanYourWealth-Icon.png";
 
 const API = import.meta.env.VITE_API_URL;
 
