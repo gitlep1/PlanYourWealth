@@ -15,8 +15,8 @@ const {
   checkUserValues,
   checkUserExtraEntries,
 } = require("../Validation/entryValidation");
-const { requireAuth } = require("../validation/requireAuth");
-const { scopeAuth } = require("../validation/scopeAuth");
+const { requireAuth } = require("../Validation/requireAuth");
+const { scopeAuth } = require("../Validation/scopeAuth");
 
 const JSK = process.env.JWT_SECRET;
 
