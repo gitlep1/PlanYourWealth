@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const JSK = process.env.JWT_SECRET;
+const JWTS = process.env.JWT_SECRET;
 const { promisify } = require("util");
 
 const requireAuth = () => {
@@ -14,7 +14,7 @@ const requireAuth = () => {
     console.log("=== requireAuth token", { token }, "===");
 
     try {
-      const decoded = await promisify(jwt.verify)(token, JSK);
+      const decoded = await promisify(jwt.verify)(token, JWTS);
 
       req.user = {
         token,
@@ -37,7 +37,7 @@ const requireAuth = () => {
             scopes: ["read:user", "write:user"],
           };
 
-          const newToken = jwt.sign(newClientTokenPayload, JSK, {
+          const newToken = jwt.sign(newClientTokenPayload, JWTS, {
             expiresIn: "30d",
           });
 

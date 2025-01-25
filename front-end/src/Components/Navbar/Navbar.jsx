@@ -15,7 +15,7 @@ import {
 import { SetCookies } from "../../CustomFunctions/HandleCookies";
 import PlanYourWealthImage from "../../Images/PlanYourWealth-Icon.png";
 
-const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_PUBLIC_API_BASE;
 
 export const Navbar = () => {
   const navigate = useNavigate();

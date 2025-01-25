@@ -18,7 +18,7 @@ const {
 const { requireAuth } = require("../Validation/requireAuth");
 const { scopeAuth } = require("../Validation/scopeAuth");
 
-const JSK = process.env.JWT_SECRET;
+const JWTS = process.env.JWT_SECRET;
 
 users.get("/", requireAuth(), scopeAuth(["read:user"]), async (req, res) => {
   try {
@@ -90,7 +90,7 @@ users.post(
         { clientTokenPayload },
         "==="
       );
-      const token = jwt.sign(clientTokenPayload, JSK, {
+      const token = jwt.sign(clientTokenPayload, JWTS, {
         expiresIn: "30d",
       });
 
@@ -123,7 +123,7 @@ users.post("/signin", async (req, res) => {
         user: checkUser,
         scopes: ["read:user", "write:user"],
       };
-      const token = jwt.sign(clientTokenPayload, JSK, {
+      const token = jwt.sign(clientTokenPayload, JWTS, {
         expiresIn: "30d",
       });
       console.log(
