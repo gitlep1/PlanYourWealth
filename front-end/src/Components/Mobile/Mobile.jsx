@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 
 import { Sidebar } from "../Sidebar/Sidebar";
 import { Homepage } from "../HomePage/Homepage";
+import { TransactionsPage } from "../TransactionsPage/Transactions";
 import { Accountpage } from "../AccountPage/Account";
 import { About } from "../AboutPage/About";
 import { Notfound } from "../Notfound/Notfound";
@@ -29,6 +30,7 @@ export const Mobile = ({ handleSidebarOpen, isOpen, resize }) => {
           <Routes>
             <Route path="/">
               <Route path="/" index element={<Homepage />} />
+              <Route path="transactions" element={<TransactionsPage />} />
               <Route path="account" element={<Accountpage />} />
               <Route path="about" element={<About />} />
               <Route path="*" element={<Notfound />} />
