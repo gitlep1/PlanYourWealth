@@ -1,39 +1,51 @@
 import "./Transactions.scss";
 import { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
+import Cookies from "js-cookie";
+import axios from "axios";
 
-const mockTransactions = {
-  expenses: [
-    { id: 1, date: "2024-01-15", description: "Groceries", amount: 85.5 },
-    { id: 2, date: "2024-01-14", description: "Gas", amount: 45.0 },
-    {
-      id: 3,
-      date: "2024-01-13",
-      description: "Internet Bill",
-      amount: 65.99,
-    },
-  ],
-  income: [
-    { id: 1, date: "2024-01-15", description: "Salary", amount: 3000.0 },
-    {
-      id: 2,
-      date: "2024-01-01",
-      description: "Freelance Work",
-      amount: 500.0,
-    },
-  ],
-};
+import { Expenses } from "./Expenses";
+import { Income } from "./Income";
+import { mockTransactions } from "./MockData";
+
+const API = import.meta.env.VITE_PUBLIC_API_BASE;
 
 export const TransactionsPage = () => {
+  const authUser = Cookies.get("authUser");
+
   const [transactionType, setTransactionType] = useState("expenses");
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    setTransactions(mockTransactions[transactionType]);
+    if (authUser !== null) {
+      getUsersTransactions();
+    } else {
+      setTransactions(mockTransactions[transactionType]);
+    }
   }, [transactionType]);
 
   const handleTypeChange = (type) => {
     setTransactionType(type);
+  };
+
+  const getUsersTransactions = async () => {
+    if (authUser !== null) {
+      const token = JSON.parse(Cookies.get("authToken"));
+
+      await axios
+        .get(`${API}/transactions`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          console.log(res.data.payload);
+          setTransactions(res.data.payload);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (

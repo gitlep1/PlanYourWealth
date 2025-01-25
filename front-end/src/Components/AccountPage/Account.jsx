@@ -1,5 +1,6 @@
 import "./Account.scss";
 import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Form, Image } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
@@ -14,6 +15,8 @@ const API = import.meta.env.VITE_API_URL;
 
 export const Accountpage = () => {
   let error = "";
+
+  const navigate = useNavigate();
 
   const userData = Cookies.get("authUser");
   const tokenData = Cookies.get("authToken");
@@ -36,7 +39,7 @@ export const Accountpage = () => {
       RemoveCookies("authToken");
       setAuthUser(null);
       setAuthToken(null);
-      window.location.reload();
+      navigate("/");
     }, 4100);
   };
 

@@ -24,7 +24,47 @@ const checkUserExtraEntries = (req, res, next) => {
   }
 };
 
+const checkTransactionValues = (req, res, next) => {
+  if (
+    req.body.transaction_name &&
+    req.body.transaction_type &&
+    req.body.transaction_amount &&
+    req.body.transaction_date
+  ) {
+    next();
+  } else {
+    res.status(400).json({
+      error:
+        "You are missing required keys. Please make sure you have: name, type, amount and date.",
+    });
+  }
+};
+
+const checkTransactionExtraEntries = (req, res, next) => {
+  const validFields = [
+    "transaction_name",
+    "transaction_type",
+    "transaction_amount",
+    "transaction_date",
+    "transaction_category",
+    "transaction_note",
+  ];
+  const keys = Object.keys(req.body);
+
+  const extraFields = keys.filter((key) => !validFields.includes(key));
+
+  if (extraFields.length > 0) {
+    res.status(400).json({
+      error: `You have extra keys: ${extraFields.join(", ")}.`,
+    });
+  } else {
+    next();
+  }
+};
+
 module.exports = {
   checkUserValues,
   checkUserExtraEntries,
+  checkTransactionValues,
+  checkTransactionExtraEntries,
 };
