@@ -6,8 +6,6 @@ import Cookies from "js-cookie";
 import axios from "axios";
 
 import { userContext, tokenContext } from "../../CustomContexts/Contexts";
-import { Signin } from "./Signin/Signin";
-import { Signup } from "./Signup/Signup";
 import { GoogleAuth } from "./GoogleAuth/GoogleAuth";
 
 import { SetCookies, RemoveCookies } from "../../CustomFunctions/HandleCookies";
@@ -18,41 +16,16 @@ export const Accountpage = () => {
   let error = "";
 
   const userData = Cookies.get("authUser");
-  const tokenData = Cookies.get("token");
+  const tokenData = Cookies.get("authToken");
 
-  const { authUser, setAuthUser } = useContext(userContext);
-  const { authToken, setAuthToken } = useContext(tokenContext);
+  const { setAuthUser } = useContext(userContext);
+  const { setAuthToken } = useContext(tokenContext);
 
-  const [isSigningUp, setIsSigningUp] = useState(false);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [theme, setTheme] = useState("default");
   const [profileimg, setProfileimg] = useState("");
-
-  const handleSignUpClick = () => {
-    setIsSigningUp(!isSigningUp);
-  };
-
-  if (authUser) {
-    const expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + 30);
-    SetCookies("authUser", authUser, expirationDate);
-    SetCookies("token", authToken, expirationDate);
-  }
-
-  const renderAuthForms = () => {
-    return (
-      <>
-        {isSigningUp ? (
-          <Signup handleSignUpClick={handleSignUpClick} />
-        ) : (
-          <Signin handleSignUpClick={handleSignUpClick} />
-        )}
-        <GoogleAuth />
-      </>
-    );
-  };
 
   const handleSignOut = () => {
     toast.success("You have been signed out.", {
@@ -60,7 +33,7 @@ export const Accountpage = () => {
     });
     setTimeout(() => {
       RemoveCookies("authUser");
-      RemoveCookies("token");
+      RemoveCookies("authToken");
       setAuthUser(null);
       setAuthToken(null);
       window.location.reload();
@@ -131,7 +104,7 @@ export const Accountpage = () => {
   };
 
   const renderAccountSettings = () => {
-    if (userData && tokenData) {
+    if (userData) {
       const user = JSON.parse(userData);
 
       return (
@@ -196,21 +169,12 @@ export const Accountpage = () => {
                 onChange={(e) => setTheme(e.target.value)}
               >
                 <option value={user.theme}>{formatTheme(user.theme)}</option>
-                <option value="ocean-breeze">
-                  Ocean Breeze (Teal Navbar / Light Blue Body)
-                </option>
-                <option value="forest-glade">
-                  Forest Glade (Dark Green Navbar / Light Green Body)
-                </option>
-                <option value="sunset-blush">
-                  Sunset Blush (Orange Navbar / Pink Body)
-                </option>
-                <option value="midnight-dream">
-                  Midnight Dream (Black Navbar / Dark Blue Body)
-                </option>
-                <option value="golden-dawn">
-                  Golden Dawn (Gold Navbar / Cream Body)
-                </option>
+                <option value="NDM">Normal Dark Mode</option>
+                <option value="VDM">Very Dark Mode</option>
+                <option value="HC-DM">High Contrast Dark Mode</option>
+                <option value="NLM">Normal Light Mode</option>
+                <option value="VLM">Very Light Mode</option>
+                <option value="HC-LM">High Contrast Light Mode</option>
               </Form.Control>
             </Form.Group>
 
@@ -238,9 +202,7 @@ export const Accountpage = () => {
 
   return (
     <div className="account-container">
-      <div className="account-content">
-        {authUser ? renderAccountSettings() : renderAuthForms()}
-      </div>
+      <div className="account-content">{renderAccountSettings()}</div>
     </div>
   );
 };

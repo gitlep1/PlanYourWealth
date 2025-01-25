@@ -65,8 +65,8 @@ export const Navbar = () => {
           setAuthUser(res.data.payload);
           setAuthToken(res.data.token);
 
-          SetCookies("authUser", res.data.payload, "30d");
-          SetCookies("authToken", res.data.token, "30d");
+          SetCookies("authUser", res.data.payload, 30);
+          SetCookies("authToken", res.data.token, 30);
 
           handleClose();
 
@@ -75,7 +75,7 @@ export const Navbar = () => {
           }, 5000);
         })
         .catch((error) => {
-          return toast.error(`Sign in failed: ${error.response.data}`, {
+          return toast.error(`Sign in failed: ${error.response.data.error}`, {
             containerId: "toast-notify",
           });
         });
@@ -98,8 +98,8 @@ export const Navbar = () => {
           setAuthUser(res.data.payload);
           setAuthToken(res.data.token);
 
-          SetCookies("authUser", res.data.payload, "30d");
-          SetCookies("authToken", res.data.token, "30d");
+          SetCookies("authUser", res.data.payload, 30);
+          SetCookies("authToken", res.data.token, 30);
 
           handleClose();
 
@@ -108,7 +108,7 @@ export const Navbar = () => {
           }, 5000);
         })
         .catch((error) => {
-          return toast.error(`Sign up failed: ${error.response.data.message}`, {
+          return toast.error(`Sign up failed: ${error.response.data.error}`, {
             containerId: "toast-notify",
           });
         });
@@ -168,6 +168,9 @@ export const Navbar = () => {
       <div className="nav-links-container">
         <div className="nav-link" onClick={() => navigate("/")}>
           Home
+        </div>
+        <div className="nav-link" onClick={() => navigate("/transactions")}>
+          Transactions
         </div>
         {authUser ? (
           <div className="nav-link" onClick={() => navigate("/account")}>

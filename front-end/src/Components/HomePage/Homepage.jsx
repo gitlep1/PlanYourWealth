@@ -1,9 +1,8 @@
 import "./Homepage.scss";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button, Image } from "react-bootstrap";
 import Cookies from "js-cookie";
-
-import { userContext, tokenContext } from "../../CustomContexts/Contexts";
 
 export const Homepage = () => {
   const navigate = useNavigate();
@@ -24,19 +23,26 @@ export const Homepage = () => {
 
   return (
     <div className="homepage-container">
+      {userData !== null && JSON.parse(userData).profileimg !== "" && (
+        <Image
+          src={JSON.parse(userData).profileimg}
+          className="homepage-profileimg"
+        />
+      )}
       <h1>
         {timeOfDay}, {userData !== null ? JSON.parse(userData).username : null}
-        Welcome to Our Website!
+        <br />
+        Welcome to PlanYourWealth!
       </h1>
-      <p>Your personalized experience starts here. Enjoy your stay!</p>
-      <button
-        className="cta-button"
+      <p>Your personalized finance experience starts here. Enjoy your stay!</p>
+      <Button
+        className="get-started-button"
         onClick={() => {
-          navigate("/");
+          navigate("/transactions");
         }}
       >
         Get Started
-      </button>
+      </Button>
     </div>
   );
 };

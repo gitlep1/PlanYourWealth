@@ -1,0 +1,46 @@
+.transactions-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.transaction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.transaction-toggle button {
+  padding: 8px 16px;
+  margin: 0 5px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+
+  &.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.income {
+  color: #28a745;
+}
+
+.expense {
+  color: #dc3545;
+}
