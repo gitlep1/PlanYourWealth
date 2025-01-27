@@ -15,8 +15,9 @@ const getTransactionByID = async (id) => {
 
 const createTransaction = async (transaction) => {
   const query =
-    "INSERT INTO transactions (transaction_name, transaction_type, transaction_amount, transaction_date, transaction_category, transaction_note) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *";
+    "INSERT INTO transactions (user_id, transaction_name, transaction_type, transaction_amount, transaction_date, transaction_category, transaction_note) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *";
   const newTransaction = await db.oneOrNone(query, [
+    transaction.user_id,
     transaction.transaction_name,
     transaction.transaction_type,
     transaction.transaction_amount,
