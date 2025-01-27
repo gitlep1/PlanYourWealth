@@ -91,7 +91,11 @@ export const Navbar = () => {
         });
       }
 
-      await axios
+      const sendVerification = await axios
+        .post(`${API}/send-verification`, email)
+        .then((res) => {});
+
+      const signUpUser = await axios
         .post(`${API}/users/signup`, userData)
         .then((res) => {
           toast.success(

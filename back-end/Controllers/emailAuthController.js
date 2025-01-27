@@ -21,7 +21,7 @@ const generateCode = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-emailAuth.post("/auth/send-verification", async (req, res) => {
+emailAuth.post("/send-verification", async (req, res) => {
   const { email } = req.body;
 
   try {
@@ -44,7 +44,7 @@ emailAuth.post("/auth/send-verification", async (req, res) => {
   }
 });
 
-emailAuth.post("/auth/verify-code", async (req, res) => {
+emailAuth.post("/verify-code", async (req, res) => {
   const { email, code } = req.body;
 
   try {
@@ -57,7 +57,7 @@ emailAuth.post("/auth/verify-code", async (req, res) => {
     const { code: storedCode, created_at } = emailVerification;
     const expiresAt = new Date(new Date(created_at).getTime() + 5 * 60 * 1000);
 
-    if (storedCode !== code) {
+    if (code !== storedCode) {
       return res.status(400).json({ message: "Invalid verification code." });
     }
 
