@@ -5,7 +5,7 @@ export const Incomes = ({ income, error }) => {
       <table>
         <thead>
           <tr>
-            <th>Dateee</th>
+            <th>Date</th>
             <th>Description</th>
             <th>Amount</th>
           </tr>

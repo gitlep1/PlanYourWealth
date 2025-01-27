@@ -40,9 +40,10 @@ app.options("*", cors());
 
 app.use(express.json());
 
-app.use("/auth", googleAuth);
 app.use("/users", usersController);
 app.use("/transactions", transactionsController);
+
+app.use("/auth", googleAuth);
 app.use("/email", emailAuthController);
 
 app.get("/", (req, res) => {

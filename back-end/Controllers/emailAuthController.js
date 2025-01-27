@@ -10,10 +10,11 @@ const {
 } = require("../Queries/emailAuthQueries");
 
 const transporter = nodemailer.createTransport({
-  service: "Gmail",
+  host: process.env.EMAIL_HOST,
+  port: 2525,
   auth: {
-    user: process.env.EMAIL,
-    pass: process.env.EMAIL_PASSWORD,
+    user: process.env.USER,
+    pass: process.env.PASS,
   },
 });
 
@@ -26,18 +27,23 @@ emailAuth.post("/send-verification", async (req, res) => {
 
   try {
     const code = generateCode();
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
-    await createEmailVerification(email, code);
+    const createdEmailAuth = await createEmailVerification(email, code);
 
-    await transporter.sendMail({
-      from: process.env.EMAIL,
-      to: email,
-      subject: "Your Verification Code",
-      text: `Your verification code is: ${code}. It expires in 5 minutes.`,
-    });
+    if (createdEmailAuth) {
+      await transporter.sendMail({
+        from: process.env.EMAIL,
+        to: email,
+        subject: "Your Verification Code",
+        text: `Your verification code is: ${code}. It expires in 5 minutes.`,
+      });
 
-    res.status(200).json({ message: "Verification code sent to your email." });
+      res
+        .status(200)
+        .json({ message: "Verification code sent to your email." });
+    } else {
+      res.status(500).json({ message: "Failed to create email verification." });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Failed to send verification code." });

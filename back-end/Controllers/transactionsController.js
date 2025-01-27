@@ -88,18 +88,21 @@ transactions.post(
       const decoded = jwt.decode(token);
 
       const getUser = await getUserByID(decoded.user.id);
+      if (!getUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
 
       const newTransactionData = {
+        user_id: getUser.id,
         transaction_name: req.body.transaction_name,
         transaction_type: req.body.transaction_type,
-        transaction_amount: req.body.transaction_amount,
+        transaction_amount: parseFloat(req.body.transaction_amount),
         transaction_date: req.body.transaction_date,
         transaction_category: req.body.transaction_category,
         transaction_note: req.body.transaction_note,
-        user_id: getUser.id,
       };
-
       const newTransaction = await createTransaction(newTransactionData);
+
       const transactionDataForClient = {
         id: newTransaction.id,
         transaction_name: newTransaction.transaction_name,

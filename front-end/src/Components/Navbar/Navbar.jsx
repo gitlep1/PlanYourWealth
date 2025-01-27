@@ -35,6 +35,9 @@ export const Navbar = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [isSignin, setIsSignin] = useState(true);
+  const [codeInput, setCodeInput] = useState("");
+
+  const [error, setError] = useState(null);
 
   const handleShow = () => {
     setShowModal(true);
@@ -91,6 +94,21 @@ export const Navbar = () => {
         });
       }
 
+      // const userData = {
+      //   email,
+      // };
+
+      // await axios
+      //   .post(`${API}/email/send-verification`, userData)
+      //   .then((res) => {
+      //     toast.success(res.data.message, {
+      //       containerId: "toast-notify",
+      //     });
+      //   })
+      //   .catch((err) => {
+      //     setError(err.response.data.error);
+      //   });
+
       await axios
         .post(`${API}/users/signup`, userData)
         .then((res) => {
@@ -118,6 +136,10 @@ export const Navbar = () => {
           });
         });
     }
+  };
+
+  const displayVerificationToast = () => {
+    let code = null;
   };
 
   const handleClearForms = () => {

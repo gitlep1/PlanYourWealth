@@ -272,8 +272,7 @@ export const UsersTransactionsPage = () => {
           },
         })
         .then((res) => {
-          console.log(res.data.payload);
-          // setTransactions((prev) => [...prev, res.data.payload]);
+          setTransactions((prev) => [...prev, res.data.payload]);
         })
         .catch((err) => {
           setError(err);
@@ -382,8 +381,11 @@ export const UsersTransactionsPage = () => {
         },
       ],
     };
-  } else if (transactionType === "income") {
-    const filteredIncome = transactions.filter((t) => t.type === "income");
+  }
+  if (transactionType === "income") {
+    const filteredIncome = transactions.filter(
+      (t) => t.transaction_type === "income"
+    );
     const labels = filteredIncome.map((t) => t.transaction_name);
     const data = filteredIncome.map((t) => t.transaction_amount);
 
@@ -496,27 +498,31 @@ export const UsersTransactionsPage = () => {
               </tr>
             </thead>
             <tbody>
-              {transactions.map((transaction) => (
-                <tr key={transaction.id}>
-                  <td>{transaction.id}</td>
-                  <td>{transaction.transaction_name}</td>
-                  <td
-                    className={
-                      transaction.type === "expenses" ? "expense" : "income"
-                    }
-                  >
-                    ${transaction.transaction_amount.toFixed(2)}
-                    <span>
-                      {transaction.type === "expenses" ? (
-                        <FaMinus />
-                      ) : (
-                        <FaPlus />
-                      )}
-                    </span>
-                  </td>
-                  <td>{transaction.transaction_date}</td>
-                </tr>
-              ))}
+              {transactions.map((transaction) => {
+                return (
+                  <tr key={transaction.id}>
+                    <td>{transaction.id}</td>
+                    <td>{transaction.transaction_name}</td>
+                    <td
+                      className={
+                        transaction.transaction_type === "expenses"
+                          ? "expense"
+                          : "income"
+                      }
+                    >
+                      ${transaction.transaction_amount.toFixed(2)}
+                      <span>
+                        {transaction.transaction_type === "expenses" ? (
+                          <FaMinus />
+                        ) : (
+                          <FaPlus />
+                        )}
+                      </span>
+                    </td>
+                    <td>{transaction.transaction_date}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </Table>
         </div>
