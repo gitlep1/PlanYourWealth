@@ -6,7 +6,7 @@ import axios from "axios";
 import { errorContext } from "../../../CustomContexts/Contexts";
 
 const ClientID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_PUBLIC_API_BASE;
 
 export const GoogleAuth = () => {
   const { error, setError } = useContext(errorContext);

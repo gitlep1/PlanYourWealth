@@ -1,26 +1,36 @@
 import "./Transactions.scss";
 import { useState, useEffect } from "react";
 import { Table, Button, Modal, Form } from "react-bootstrap";
+import Cookies from "js-cookie";
+import axios from "axios";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export const MockTransactionsPage = () => {
+const API = import.meta.env.VITE_PUBLIC_API_BASE;
+
+export const UsersTransactionsPage = () => {
   let pieChartData = {};
+
+  const authToken = Cookies.get("authToken") || null;
 
   const [showModal, setShowModal] = useState(false);
   const [modalAction, setModalAction] = useState(null);
+  const [name, setName] = useState("");
   const [type, setType] = useState("expenses");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
-  const [name, setName] = useState("");
+  const [category, setCategory] = useState("");
+  const [note, setNote] = useState("");
   const [transactionID, setTransactionID] = useState(null);
   const [transactionType, setTransactionType] = useState("expenses");
   const [transactions, setTransactions] = useState([]);
+  const [error, setError] = useState(null);
 
   const stockData = [
     { name: "AAPL", change: 2.3 },
@@ -30,40 +40,26 @@ export const MockTransactionsPage = () => {
     { name: "MSFT", change: -0.8 },
   ];
 
-  const mockTransactions = [
-    {
-      id: 1,
-      type: "expenses",
-      amount: 500,
-      date: "2025-01-20",
-      name: "Groceries",
-    },
-    {
-      id: 2,
-      type: "income",
-      amount: 1200,
-      date: "2025-01-15",
-      name: "Salary",
-    },
-    {
-      id: 3,
-      type: "expenses",
-      amount: 200,
-      date: "2025-01-18",
-      name: "Utilities",
-    },
-    {
-      id: 4,
-      type: "income",
-      amount: 300,
-      date: "2025-01-12",
-      name: "Freelancing",
-    },
-  ];
-
   useEffect(() => {
-    setTransactions(mockTransactions);
-  }, [transactionType]); // eslint-disable-line
+    getUsersTransactions();
+  }, [transactionType]);
+
+  const getUsersTransactions = async () => {
+    const token = JSON.parse(authToken);
+
+    await axios
+      .get(`${API}/transactions`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setTransactions(res.data.payload);
+      })
+      .catch((err) => {
+        setError(err);
+      });
+  };
 
   const handleTypeChange = (type) => {
     setTransactionType(type);
@@ -96,7 +92,7 @@ export const MockTransactionsPage = () => {
       setName(transaction.name);
     } else {
       setType("expenses");
-      setAmount(0);
+      setAmount("");
       setDate("");
       setName("");
     }
@@ -110,6 +106,7 @@ export const MockTransactionsPage = () => {
             <Form.Label>Type</Form.Label>
             <Form.Control
               as="select"
+              required
               value={type}
               onChange={(e) => setType(e.target.value)}
               placeholder="Select type"
@@ -123,6 +120,7 @@ export const MockTransactionsPage = () => {
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="text"
+              required
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter name"
@@ -133,6 +131,7 @@ export const MockTransactionsPage = () => {
             <Form.Label>Amount</Form.Label>
             <Form.Control
               type="number"
+              required
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="Enter amount"
@@ -143,9 +142,30 @@ export const MockTransactionsPage = () => {
             <Form.Label>Date</Form.Label>
             <Form.Control
               type="date"
+              required
               value={date}
               onChange={(e) => setDate(e.target.value)}
               placeholder="Enter date"
+            />
+          </Form.Group>
+
+          <Form.Group controlId="formCategory">
+            <Form.Label>Category</Form.Label>
+            <Form.Control
+              type="text"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              placeholder="(Optional) Enter category"
+            />
+          </Form.Group>
+
+          <Form.Group controlId="formNote">
+            <Form.Label>Note</Form.Label>
+            <Form.Control
+              type="text"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="(Optional) Enter note"
             />
           </Form.Group>
         </Form>
@@ -224,11 +244,48 @@ export const MockTransactionsPage = () => {
     }
   };
 
-  const addTransaction = (newTransaction) => {
-    setTransactions((prev) => [
-      ...prev,
-      { ...newTransaction, id: prev.length + 1 },
-    ]);
+  const isValidFields = (transaction) => {
+    if (
+      transaction.transaction_name === "" ||
+      transaction.transaction_name === undefined ||
+      transaction.transaction_type === "" ||
+      transaction.transaction_type === undefined ||
+      transaction.transaction_date === "" ||
+      transaction.transaction_date === undefined ||
+      transaction.transaction_amount === "" ||
+      transaction.transaction_amount === undefined ||
+      isNaN(transaction.transaction_amount)
+    ) {
+      return false;
+    }
+    return true;
+  };
+
+  const addTransaction = async (newTransaction) => {
+    if (isValidFields(newTransaction)) {
+      const token = JSON.parse(authToken);
+
+      await axios
+        .post(`${API}/transactions/create-transaction`, newTransaction, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          console.log(res.data.payload);
+          // setTransactions((prev) => [...prev, res.data.payload]);
+        })
+        .catch((err) => {
+          setError(err);
+        });
+    } else {
+      return toast.error(
+        `You have missing required fields [Name, Type, Amount, Date]: Please review your transaction and try again.`,
+        {
+          containerId: "general-toast",
+        }
+      );
+    }
   };
 
   const editTransaction = (updatedTransaction) => {
@@ -250,10 +307,12 @@ export const MockTransactionsPage = () => {
   const handleModalAction = () => {
     if (modalAction === "add") {
       addTransaction({
-        type,
-        amount: parseFloat(amount),
-        date,
-        name,
+        transaction_name: name,
+        transaction_type: type,
+        transaction_amount: parseFloat(amount),
+        transaction_date: date,
+        transaction_category: category,
+        transaction_note: note,
       });
     } else if (modalAction === "edit") {
       editTransaction({
@@ -299,17 +358,19 @@ export const MockTransactionsPage = () => {
   };
 
   const totalExpenses = transactions
-    .filter((t) => t.type === "expenses")
-    .reduce((acc, t) => acc + t.amount, 0);
+    .filter((t) => t.transaction_type === "expenses")
+    .reduce((acc, t) => acc + t.transaction_amount, 0);
 
   const totalIncome = transactions
-    .filter((t) => t.type === "income")
-    .reduce((acc, t) => acc + t.amount, 0);
+    .filter((t) => t.transaction_type === "income")
+    .reduce((acc, t) => acc + t.transaction_amount, 0);
 
   if (transactionType === "expenses") {
-    const filteredIncome = transactions.filter((t) => t.type === "expenses");
-    const labels = filteredIncome.map((t) => t.name);
-    const data = filteredIncome.map((t) => t.amount);
+    const filteredIncome = transactions.filter(
+      (t) => t.transaction_type === "expenses"
+    );
+    const labels = filteredIncome.map((t) => t.transaction_name);
+    const data = filteredIncome.map((t) => t.transaction_amount);
 
     pieChartData = {
       labels,
@@ -323,8 +384,8 @@ export const MockTransactionsPage = () => {
     };
   } else if (transactionType === "income") {
     const filteredIncome = transactions.filter((t) => t.type === "income");
-    const labels = filteredIncome.map((t) => t.name);
-    const data = filteredIncome.map((t) => t.amount);
+    const labels = filteredIncome.map((t) => t.transaction_name);
+    const data = filteredIncome.map((t) => t.transaction_amount);
 
     pieChartData = {
       labels,
@@ -365,20 +426,30 @@ export const MockTransactionsPage = () => {
       <div className="chart-section">
         <div className="pie-chart">
           <h3>Money Flow</h3>
-          <Pie data={pieChartData} />
+          {transactions.length > 0 ? (
+            <Pie data={pieChartData} />
+          ) : (
+            <p>No data available</p>
+          )}
         </div>
         <div className="money-summary">
           <h3>Money In/Out</h3>
-          <p>
-            <strong>Total Income:</strong> ${totalIncome.toFixed(2)}
-          </p>
-          <p>
-            <strong>Total Expenses:</strong> ${totalExpenses.toFixed(2)}
-          </p>
-          <p>
-            <strong>Net Balance:</strong> $
-            {(totalIncome - totalExpenses).toFixed(2)}
-          </p>
+          {transactions.length > 0 ? (
+            <>
+              <p>
+                <strong>Total Income:</strong> ${totalIncome.toFixed(2)}
+              </p>
+              <p>
+                <strong>Total Expenses:</strong> ${totalExpenses.toFixed(2)}
+              </p>
+              <p>
+                <strong>Net Balance:</strong> $
+                {(totalIncome - totalExpenses).toFixed(2)}
+              </p>
+            </>
+          ) : (
+            <p>No data available</p>
+          )}
         </div>
       </div>
 
@@ -428,13 +499,13 @@ export const MockTransactionsPage = () => {
               {transactions.map((transaction) => (
                 <tr key={transaction.id}>
                   <td>{transaction.id}</td>
-                  <td>{transaction.name}</td>
+                  <td>{transaction.transaction_name}</td>
                   <td
                     className={
                       transaction.type === "expenses" ? "expense" : "income"
                     }
                   >
-                    ${transaction.amount.toFixed(2)}
+                    ${transaction.transaction_amount.toFixed(2)}
                     <span>
                       {transaction.type === "expenses" ? (
                         <FaMinus />
@@ -443,7 +514,7 @@ export const MockTransactionsPage = () => {
                       )}
                     </span>
                   </td>
-                  <td>{transaction.date}</td>
+                  <td>{transaction.transaction_date}</td>
                 </tr>
               ))}
             </tbody>

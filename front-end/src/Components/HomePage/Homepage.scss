@@ -1,7 +1,7 @@
 .homepage-container {
-  height: 100dvh;
-  text-align: center;
-  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  height: 90dvh;
 
   .homepage-profileimg {
     width: 100px;
@@ -18,6 +18,8 @@
   }
 
   .get-started-button {
-    padding: 10px 20px;
+    font-size: 1.5rem;
+    width: 50%;
+    margin: 0 auto;
   }
 }

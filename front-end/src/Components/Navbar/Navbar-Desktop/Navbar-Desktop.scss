@@ -1,0 +1,126 @@
+.desktop-nav-container {
+  display: grid;
+  grid-template-columns: 100px repeat(2, 1fr) 100px;
+  margin: 0 auto;
+
+  .nav-corner-triangle-container {
+    grid-column: 1;
+    position: relative;
+
+    .nav-corner-triangle {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 53px 53px 0 0;
+    }
+  }
+
+  .nav-title {
+    grid-column: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .nav-logo {
+      width: 50px;
+    }
+  }
+
+  .nav-links-container {
+    grid-column: 3;
+    padding: 0.5em;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1em;
+
+    .nav-link {
+      text-align: center;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .nav-theme-switcher-container {
+    grid-column: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0.5em;
+
+    .nav-theme-switcher-outer-box {
+      position: relative;
+      width: 50px;
+      height: 25px;
+
+      .nav-theme-switcher-inner-box {
+        position: absolute;
+        width: 25px;
+        height: 23px;
+        z-index: 1;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      #nav-light-logo,
+      #nav-dark-logo {
+        position: absolute;
+        font-size: 20px;
+        top: 2px;
+        transition: opacity 0.3s ease-in-out;
+      }
+
+      #nav-dark-logo {
+        left: 2px;
+        color: whitesmoke;
+        opacity: 1;
+      }
+
+      #nav-light-logo {
+        right: 2px;
+        color: black;
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.theme-switcher-dark {
+  .nav-theme-switcher-inner-box {
+    transform: translateX(25px);
+  }
+}
+
+.theme-switcher-light {
+  .nav-theme-switcher-inner-box {
+    transform: translateX(0);
+  }
+}
+
+.nav-modal {
+  .auth-buttons-container {
+    display: flex;
+    justify-content: space-around;
+  }
+  .auth-button {
+    margin-top: 1em;
+  }
+
+  .nav-modal-footer {
+    display: flex;
+    justify-content: center;
+
+    .toggle-form {
+      color: #0a58ca;
+      margin-top: 1em;
+
+      &:hover {
+        cursor: pointer;
+        color: rgb(35, 200, 200);
+      }
+    }
+  }
+}

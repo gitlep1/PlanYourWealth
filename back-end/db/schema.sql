@@ -5,6 +5,14 @@ CREATE DATABASE plan_your_wealth_db;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+DROP TABLE IF EXISTS email_verification;
+CREATE TABLE email_verification (
+  id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
+  email TEXT NOT NULL UNIQUE,
+  code TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
   id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
@@ -22,7 +30,7 @@ CREATE TABLE transactions (
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   transaction_name TEXT NOT NULL,
   transaction_type TEXT NOT NULL,
-  transaction_amount DECIMAL NOT NULL,
+  transaction_amount INT NOT NULL,
   transaction_date DATE NOT NULL,
   transaction_category TEXT,
   transaction_note TEXT,
@@ -34,21 +42,9 @@ CREATE TABLE investments (
   id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   investment_name TEXT NOT NULL,
-  investment_amount DECIMAL NOT NULL,
+  investment_amount INT NOT NULL,
   investment_date DATE NOT NULL,
   investment_category TEXT,
   investment_note TEXT,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
-DROP TABLE IF EXISTS goals;
-CREATE TABLE goals (
-  id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
-  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-  goal_name TEXT NOT NULL,
-  goal_amount DECIMAL NOT NULL,
-  goal_date DATE NOT NULL,
-  goal_category TEXT,
-  goal_note TEXT,
   created_at TIMESTAMP DEFAULT NOW()
 );

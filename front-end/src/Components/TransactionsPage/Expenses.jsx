@@ -1,9 +1,23 @@
-export const Expenses = ({ expense }) => {
+export const Expenses = ({ expense, error }) => {
   return (
-    <tr key={expense.id}>
-      <td>{expense.transaction_date}</td>
-      <td>{expense.transaction_name}</td>
-      <td>${expense.transaction_amount.toFixed(2)}</td>
-    </tr>
+    <div className="transactions-list" key={expense.id}>
+      {error && <div>{error}</div>}
+      <table>
+        <thead>
+          <tr>
+            <th>Datee</th>
+            <th>Description</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{expense.transaction_date}</td>
+            <td>{expense.transaction_name}</td>
+            <td>${expense.transaction_amount.toFixed(2)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   );
 };

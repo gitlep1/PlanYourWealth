@@ -37,6 +37,7 @@ users.get(
   requireAuth(),
   scopeAuth(["read:user", "write:user"]),
   async (req, res) => {
+    console.log("=== GET User by ID ===", req.user);
     try {
       const { token } = req.user;
       const decoded = jwt.decode(token);

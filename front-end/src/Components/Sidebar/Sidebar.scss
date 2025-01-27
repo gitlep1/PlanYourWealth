@@ -1,3 +1,53 @@
 .sidebar-container {
-  border: 3px solid red;
+  position: absolute;
+  height: 100dvh;
+  border: 3px solid whitesmoke;
+  background-color: #242424;
+
+  .sidebar-content {
+    height: 95%;
+  }
+
+  .sidebar-account-overview {
+    color: black;
+    display: grid;
+    width: 85%;
+    height: 15%;
+    margin: 0 auto;
+    background-color: aliceblue;
+    align-items: center;
+
+    .account-overview-item {
+      display: flex;
+      justify-content: space-between;
+      width: 95%;
+      margin: 0 auto;
+    }
+  }
+
+  .sidebar-manage-accounts {
+    position: relative;
+    color: black;
+    width: 85%;
+    height: 65%;
+    margin: 0 auto;
+    overflow: auto;
+    background-color: aliceblue;
+
+    .sidebar-add-account-button {
+      position: absolute;
+      left: 0;
+    }
+
+    .sidebar-accounts {
+      display: grid;
+      margin-top: 3em;
+
+      .manage-accounts-item {
+        height: 5em;
+        width: 95%;
+        margin: 0 auto;
+      }
+    }
+  }
 }
