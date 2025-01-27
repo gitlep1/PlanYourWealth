@@ -5,6 +5,14 @@ CREATE DATABASE plan_your_wealth_db;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+DROP TABLE IF EXISTS email_verification;
+CREATE TABLE email_verification (
+  id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
+  email TEXT NOT NULL,
+  code TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
   id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,

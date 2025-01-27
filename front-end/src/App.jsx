@@ -17,7 +17,7 @@ import { Navbar } from "./Components/Navbar/Navbar";
 import { Desktop } from "./Components/Desktop/Desktop";
 import { Mobile } from "./Components/Mobile/Mobile";
 
-const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_PUBLIC_API_BASE;
 
 const App = () => {
   const screenVersion = useContext(screenVersionContext);
@@ -71,7 +71,7 @@ const App = () => {
         setAuthToken(res.data.token);
       })
       .catch((err) => {
-        console.log(err);
+        console.log({ err });
       });
   };
 

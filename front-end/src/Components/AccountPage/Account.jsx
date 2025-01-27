@@ -11,7 +11,7 @@ import { GoogleAuth } from "./GoogleAuth/GoogleAuth";
 
 import { SetCookies, RemoveCookies } from "../../CustomFunctions/HandleCookies";
 
-const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_PUBLIC_API_BASE;
 
 export const Accountpage = () => {
   let error = "";

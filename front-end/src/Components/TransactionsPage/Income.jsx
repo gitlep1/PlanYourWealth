@@ -1,9 +1,23 @@
-export const Income = ({ income }) => {
+export const Incomes = ({ income, error }) => {
   return (
-    <tr key={income.id}>
-      <td>{income.transaction_date}</td>
-      <td>{income.transaction_name}</td>
-      <td>${income.transaction_amount.toFixed(2)}</td>
-    </tr>
+    <div className="transactions-list" key={income.id}>
+      {error && <div>{error}</div>}
+      <table>
+        <thead>
+          <tr>
+            <th>Dateee</th>
+            <th>Description</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{income.transaction_date}</td>
+            <td>{income.transaction_name}</td>
+            <td>${income.transaction_amount.toFixed(2)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   );
 };

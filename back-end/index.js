@@ -4,6 +4,7 @@ const cors = require("cors");
 const googleAuth = require("./Validation/googleAuthValidation");
 const usersController = require("./Controllers/usersController");
 const transactionsController = require("./Controllers/transactionsController");
+const emailAuthController = require("./Controllers/emailAuthController");
 
 require("dotenv").config();
 
@@ -42,6 +43,7 @@ app.use(express.json());
 app.use("/auth", googleAuth);
 app.use("/users", usersController);
 app.use("/transactions", transactionsController);
+app.use("/email", emailAuthController);
 
 app.get("/", (req, res) => {
   res.send("Welcome to PlanYourWealth Server");

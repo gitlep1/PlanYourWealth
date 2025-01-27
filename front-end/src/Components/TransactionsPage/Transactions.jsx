@@ -4,17 +4,18 @@ import { Table } from "react-bootstrap";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-import { Expenses } from "./Expenses";
-import { Income } from "./Income";
 import { mockTransactions } from "./MockData";
+import { Expenses } from "./Expenses";
+import { Incomes } from "./Income";
 
 const API = import.meta.env.VITE_PUBLIC_API_BASE;
 
 export const TransactionsPage = () => {
-  const authUser = Cookies.get("authUser");
+  const authUser = Cookies.get("authUser") || null;
 
   const [transactionType, setTransactionType] = useState("expenses");
   const [transactions, setTransactions] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (authUser !== null) {
@@ -39,11 +40,71 @@ export const TransactionsPage = () => {
           },
         })
         .then((res) => {
-          console.log(res.data.payload);
           setTransactions(res.data.payload);
         })
         .catch((err) => {
-          console.log(err);
+          setError(err);
+        });
+    }
+  };
+
+  const renderMockTransactions = () => {
+    return (
+      <div className="transactions-list">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map((transaction) => (
+              <tr key={transaction.id}>
+                <td>{transaction.date}</td>
+                <td>{transaction.description}</td>
+                <td
+                  className={
+                    transactionType === "expenses" ? "expense" : "income"
+                  }
+                >
+                  ${transaction.amount.toFixed(2)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderUserTransactions = () => {
+    if (transactions.length === 0) {
+      return <div>No Transactions Found.</div>;
+    }
+
+    if (transactionType === "expenses") {
+      return transactions
+        .filter((transaction) => transaction.transaction_type === "expenses")
+        .map((expense) => {
+          if (!expense) {
+            return <div key={"empty-arr"}>No Expenses Found.</div>;
+          } else {
+            return (
+              <Expenses key={expense.id} expense={expense} error={error} />
+            );
+          }
+        });
+    } else {
+      return transactions
+        .filter((transaction) => transaction.transaction_type === "income")
+        .map((income) => {
+          if (!income) {
+            return <div key={"empty-arr"}>No Income Found.</div>;
+          } else {
+            return <Incomes key={income.id} income={income} error={error} />;
+          }
         });
     }
   };
@@ -67,33 +128,7 @@ export const TransactionsPage = () => {
           </button>
         </div>
       </div>
-
-      <div className="transactions-list">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Description</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map((transaction) => (
-              <tr key={transaction.id}>
-                <td>{transaction.date}</td>
-                <td>{transaction.description}</td>
-                <td
-                  className={
-                    transactionType === "income" ? "income" : "expense"
-                  }
-                >
-                  ${transaction.amount.toFixed(2)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {authUser === null ? renderMockTransactions() : renderUserTransactions()}
     </div>
   );
 };
