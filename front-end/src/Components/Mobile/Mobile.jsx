@@ -33,7 +33,7 @@ export const Mobile = ({ handleSidebarOpen, isOpen, resize }) => {
         <Routes>
           <Route path="/">
             <Route path="/" index element={<Homepage />} />
-            <Route path="transactions" element={<TransactionsPage />} />
+            <Route path="dashboard" element={<TransactionsPage />} />
             <Route path="account-settings" element={<Accountpage />} />
             <Route path="about" element={<About />} />
             <Route path="*" element={<Notfound />} />

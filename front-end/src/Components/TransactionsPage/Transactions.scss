@@ -1,46 +1,65 @@
 .transactions-container {
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
-}
+  padding: 2rem;
 
-.transaction-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
+  .transaction-toggle-button {
+    padding: 8px 16px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
 
-.transaction-toggle button {
-  padding: 8px 16px;
-  margin: 0 5px;
-  border: 1px solid #ddd;
-  background: white;
-  cursor: pointer;
-
-  &.active {
-    background: #007bff;
-    color: white;
-    border-color: #007bff;
+    &.active {
+      background: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
   }
-}
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
+  .income {
+    color: #28a745;
+  }
 
-th,
-td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
+  .expense {
+    color: #dc3545;
+  }
 
-.income {
-  color: #28a745;
-}
+  .chart-section {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    margin-bottom: 3rem;
 
-.expense {
-  color: #dc3545;
+    .pie-chart {
+      grid-column: 1;
+    }
+
+    .money-summary {
+      grid-column: 2;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .transactions-crud-buttons {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .history-section {
+    display: flex;
+    justify-content: space-between;
+
+    .transaction-history,
+    .stock-market {
+      width: 48%;
+    }
+
+    .positive {
+      color: green;
+    }
+
+    .negative {
+      color: red;
+    }
+  }
 }

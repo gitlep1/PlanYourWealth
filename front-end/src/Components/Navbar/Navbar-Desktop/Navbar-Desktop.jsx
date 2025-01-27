@@ -17,7 +17,14 @@ export const NavbarDesktop = ({ handleShow }) => {
   return (
     <nav className="desktop-nav-container">
       <div className="nav-corner-triangle-container">
-        <div className="nav-corner-triangle"></div>
+        <div
+          className="nav-corner-triangle"
+          style={
+            themeState === "dark"
+              ? { borderColor: "#fb7d26 transparent transparent transparent" }
+              : { borderColor: "#73d7bb transparent transparent transparent" }
+          }
+        ></div>
       </div>
 
       <div className="nav-title">
@@ -33,8 +40,8 @@ export const NavbarDesktop = ({ handleShow }) => {
         <div className="nav-link" onClick={() => navigate("/")}>
           Home
         </div>
-        <div className="nav-link" onClick={() => navigate("/transactions")}>
-          Transactions
+        <div className="nav-link" onClick={() => navigate("/dashboard")}>
+          Dashboard
         </div>
         {authUser ? (
           <div
