@@ -9,7 +9,7 @@ import axios from "axios";
 import { userContext, tokenContext } from "../../CustomContexts/Contexts";
 import { GoogleAuth } from "./GoogleAuth/GoogleAuth";
 
-import { SetCookies, RemoveCookies } from "../../CustomFunctions/HandleCookies";
+import { RemoveCookies } from "../../CustomFunctions/HandleCookies";
 
 const API = import.meta.env.VITE_PUBLIC_API_BASE;
 

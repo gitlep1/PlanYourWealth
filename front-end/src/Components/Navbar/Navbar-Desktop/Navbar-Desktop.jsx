@@ -37,8 +37,11 @@ export const NavbarDesktop = ({ handleShow }) => {
           Transactions
         </div>
         {authUser ? (
-          <div className="nav-link" onClick={() => navigate("/account")}>
-            Account
+          <div
+            className="nav-link"
+            onClick={() => navigate("/account-settings")}
+          >
+            Account Settings
           </div>
         ) : (
           <div className="nav-link" onClick={handleShow}>

@@ -77,31 +77,28 @@ const App = () => {
 
   const resizeSidebar = () => {
     if (window.innerWidth > 1000) {
-      setResize("8%");
+      setResize("18%");
     }
     if (window.innerWidth <= 1000) {
-      setResize("10%");
+      setResize("18%");
     }
     if (window.innerWidth <= 900) {
-      setResize("11%");
+      setResize("18%");
     }
     if (window.innerWidth <= 800) {
-      setResize("12%");
-    }
-    if (window.innerWidth <= 700) {
-      setResize("15%");
-    }
-    if (window.innerWidth <= 600) {
-      setResize("16%");
-    }
-    if (window.innerWidth <= 500) {
       setResize("20%");
     }
-    if (window.innerWidth <= 400) {
-      setResize("23%");
-    }
-    if (window.innerWidth <= 325) {
+    if (window.innerWidth <= 700) {
       setResize("25%");
+    }
+    if (window.innerWidth <= 600) {
+      setResize("35%");
+    }
+    if (window.innerWidth <= 500) {
+      setResize("40%");
+    }
+    if (window.innerWidth <= 400) {
+      setResize("50%");
     }
   };
 
