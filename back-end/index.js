@@ -22,7 +22,7 @@ const corsOptions = {
     console.log("origin", origin);
     if (
       allowedOrigins.includes(origin) ||
-      (origin && origin.endsWith("*.vercel.app"))
+      (origin && origin.endsWith(".vercel.app"))
     ) {
       callback(null, true);
     } else {
