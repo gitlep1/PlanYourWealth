@@ -14,13 +14,17 @@
       background-color: whitesmoke;
       position: absolute;
       bottom: -20em;
-      width: 2rem;
+      width: 5rem;
       height: 10rem;
       text-align: center;
       cursor: pointer;
       transition:
         left 0.3s ease,
         transform 0.3s ease;
+
+      &:hover {
+        background-color: #fb7d26;
+      }
 
       .sidebar-open-button-text {
         transform: rotate(90deg);

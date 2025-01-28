@@ -30,7 +30,7 @@ export const UsersTransactionsPage = () => {
   const [date, setDate] = useState("");
   const [category, setCategory] = useState("");
   const [note, setNote] = useState("");
-  const [transactionID, setTransactionID] = useState(null);
+  const [transactionID, setTransactionID] = useState("");
   const [transactionType, setTransactionType] = useState("expenses");
   const [transactions, setTransactions] = useState([]);
   const [expenseTransactions, setExpenseTransactions] = useState([]);
@@ -90,7 +90,7 @@ export const UsersTransactionsPage = () => {
     setAmount("");
     setDate("");
     setName("");
-    setTransactionID(null);
+    setTransactionID("");
     setModalAction("");
     setShowModal(false);
   };
@@ -98,13 +98,13 @@ export const UsersTransactionsPage = () => {
   const handleTransactionIDChange = (id) => {
     setTransactionID(id);
 
-    const transaction = transactions.find((t) => t.id === parseInt(id));
+    const transaction = transactions.find((t) => t.id === id);
 
     if (transaction) {
-      setType(transaction.type);
-      setAmount(transaction.amount);
-      setDate(transaction.date);
-      setName(transaction.name);
+      setType(transaction.transaction_type);
+      setAmount(transaction.transaction_amount);
+      setDate(transaction.transaction_date);
+      setName(transaction.transaction_name);
     } else {
       setType("expenses");
       setAmount("");
@@ -198,7 +198,7 @@ export const UsersTransactionsPage = () => {
           <Form.Group controlId="formID">
             <Form.Label>ID</Form.Label>
             <Form.Control
-              type="number"
+              type="string"
               value={transactionID || ""}
               onChange={(e) => handleTransactionIDChange(e.target.value)}
               placeholder="Enter ID"
@@ -207,15 +207,19 @@ export const UsersTransactionsPage = () => {
 
           <Form.Group controlId="formType">
             <Form.Label>Type</Form.Label>
-            <Form.Control
-              as="select"
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              placeholder="Select type"
+            <DropdownButton
+              id="dropdown-basic-button"
+              title={
+                type
+                  ? type.charAt(0).toUpperCase() + type.slice(1)
+                  : "Select type"
+              }
+              onSelect={handleSelect}
+              variant="primary"
             >
-              <option value="expenses">Expenses</option>
-              <option value="income">Income</option>
-            </Form.Control>
+              <Dropdown.Item eventKey="expenses">Expenses</Dropdown.Item>
+              <Dropdown.Item eventKey="income">Income</Dropdown.Item>
+            </DropdownButton>
           </Form.Group>
 
           <Form.Group controlId="formName">
@@ -283,6 +287,20 @@ export const UsersTransactionsPage = () => {
     return true;
   };
 
+  const formatTransactionDate = (date) => {
+    const options = { month: "short", day: "numeric", year: "numeric" };
+    const formattedDate = new Date(date).toLocaleDateString("en-US", options);
+    if (formattedDate === "Invalid Date") {
+      return date;
+    }
+
+    const day = new Date(date).getDate();
+    const dayWithSuffix =
+      day + (["th", "st", "nd", "rd"][((day % 10) - 1) % 10] || "th");
+
+    return formattedDate.replace(day.toString(), dayWithSuffix);
+  };
+
   const addTransaction = async (newTransaction) => {
     if (isValidFields(newTransaction)) {
       const token = JSON.parse(authToken);
@@ -311,20 +329,46 @@ export const UsersTransactionsPage = () => {
     }
   };
 
-  const editTransaction = (updatedTransaction) => {
-    setTransactions((prev) =>
-      prev.map((transaction) =>
-        transaction.id === updatedTransaction.id
-          ? { ...transaction, ...updatedTransaction }
-          : transaction
+  const editTransaction = async (updatedTransaction) => {
+    const token = JSON.parse(authToken);
+
+    await axios
+      .put(
+        `${API}/transactions/transaction/${updatedTransaction.id}`,
+        updatedTransaction,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
-    );
+      .then((res) => {
+        getUsersTransactions();
+      })
+      .catch((err) => {
+        return toast.error(`${err.response.data.error}`, {
+          containerId: "toast-notify",
+        });
+      });
   };
 
-  const deleteTransaction = (id) => {
-    setTransactions((prev) =>
-      prev.filter((transaction) => transaction.id !== id)
-    );
+  const deleteTransaction = async (id) => {
+    const token = JSON.parse(authToken);
+
+    await axios
+      .delete(`${API}/transactions/transaction/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        getUsersTransactions();
+      })
+      .catch((err) => {
+        return toast.error(`${err.response.data.error}`, {
+          containerId: "toast-notify",
+        });
+      });
   };
 
   const handleModalAction = () => {
@@ -341,9 +385,9 @@ export const UsersTransactionsPage = () => {
       editTransaction({
         id: transactionID,
         type,
+        name,
         amount: parseFloat(amount),
         date,
-        name,
       });
     } else if (modalAction === "delete") {
       deleteTransaction(transactionID);
@@ -510,7 +554,9 @@ export const UsersTransactionsPage = () => {
                       </span>
                       <br />${transaction.transaction_amount.toFixed(2)}
                     </td>
-                    <td>{transaction.transaction_date}</td>
+                    <td>
+                      {formatTransactionDate(transaction.transaction_date)}
+                    </td>
                   </tr>
                 );
               })}
