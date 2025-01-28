@@ -17,18 +17,20 @@ const allowedOrigins = [
   "https://plan-your-wealth-api.vercel.app",
 ];
 
-app.use(
-  cors({
-    credentials: true,
-    origin: (origin, callback) => {
-      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-  })
-);
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (
+      allowedOrigins.includes(origin) ||
+      (origin && origin.endsWith(".vercel.app"))
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", req.headers.origin);
