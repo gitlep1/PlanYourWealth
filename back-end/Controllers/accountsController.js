@@ -3,6 +3,13 @@ const accounts = express.Router();
 const jwt = require("jsonwebtoken");
 
 const { getUserByID } = require("../Queries/usersQueries");
+const {
+  getAllUsersAccounts,
+  getAccountByID,
+  createAccount,
+  updateAccount,
+  deleteAccount,
+} = require("../Queries/accountsQueries");
 
 const {
   checkUserValues,
