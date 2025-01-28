@@ -24,27 +24,27 @@ CREATE TABLE users (
   last_online TIMESTAMP DEFAULT NOW()
 );
 
-DROP TABLE IF EXISTS transactions;
-CREATE TABLE transactions (
-  id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
-  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-  transaction_name TEXT NOT NULL,
-  transaction_type TEXT NOT NULL,
-  transaction_amount INT NOT NULL,
-  transaction_date DATE NOT NULL,
-  transaction_category TEXT,
-  transaction_note TEXT,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
-
 DROP TABLE IF EXISTS accounts;
 CREATE TABLE accounts (
   id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   account_name TEXT NOT NULL,
   account_type TEXT NOT NULL,
-  account_balance INT NOT NULL,
+  account_balance INT NOT NULL DEFAULT 0,
   account_note TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+DROP TABLE IF EXISTS transactions;
+CREATE TABLE transactions (
+  id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  account_id UUID REFERENCES accounts(id) ON DELETE CASCADE,
+  transaction_name TEXT NOT NULL,
+  transaction_type TEXT NOT NULL,
+  transaction_amount INT NOT NULL,
+  transaction_date DATE NOT NULL,
+  transaction_category TEXT,
+  transaction_note TEXT,
   created_at TIMESTAMP DEFAULT NOW()
 );

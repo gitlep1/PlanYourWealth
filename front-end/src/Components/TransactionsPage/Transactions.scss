@@ -1,3 +1,11 @@
+$small-mobile: 400px;
+$medium-mobile: 600px;
+$large-mobile: 799px;
+
+$small-desktop: 800px;
+$medium-desktop: 1000px;
+$large-desktop: 1200px;
+
 .transactions-container {
   padding: 2rem;
 
@@ -25,11 +33,13 @@
 
   .chart-section {
     display: grid;
-    grid-template-columns: 500px 400px;
+    grid-template-columns: 1fr 400px;
     margin-bottom: 3rem;
 
     .pie-chart {
       grid-column: 1;
+      width: 500px;
+      margin: 0 auto;
     }
 
     .money-summary {
@@ -60,6 +70,444 @@
 
     .negative {
       color: red;
+    }
+  }
+}
+
+@media screen and (max-width: $large-desktop) {
+  .transactions-container {
+    padding: 0;
+
+    .transaction-toggle-button {
+      padding: 8px 16px;
+      margin: 0 5px;
+      border: 1px solid #ddd;
+      background: white;
+      cursor: pointer;
+
+      &.active {
+        background: #007bff;
+        color: white;
+        border-color: #007bff;
+      }
+    }
+
+    .income {
+      color: #28a745;
+    }
+
+    .expense {
+      color: #dc3545;
+    }
+
+    .chart-section {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      margin-bottom: 3rem;
+
+      .pie-chart {
+        grid-column: 1;
+        width: 400px;
+        margin: 0 auto;
+      }
+
+      .money-summary {
+        grid-column: 2;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .transactions-crud-buttons {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .history-section {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1em;
+      justify-content: center;
+
+      .transaction-history,
+      .stock-market {
+        width: 95%;
+        margin: 0 auto;
+      }
+
+      .positive {
+        color: green;
+      }
+
+      .negative {
+        color: red;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $medium-desktop) {
+  .transactions-container {
+    padding: 0;
+
+    .transaction-toggle-button {
+      padding: 8px 16px;
+      margin: 0 5px;
+      border: 1px solid #ddd;
+      background: white;
+      cursor: pointer;
+
+      &.active {
+        background: #007bff;
+        color: white;
+        border-color: #007bff;
+      }
+    }
+
+    .income {
+      color: #28a745;
+    }
+
+    .expense {
+      color: #dc3545;
+    }
+
+    .chart-section {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      margin-bottom: 3rem;
+      justify-content: center;
+
+      .pie-chart {
+        grid-column: 1;
+        width: 400px;
+      }
+
+      .money-summary {
+        grid-column: 2;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .transactions-crud-buttons {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .history-section {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1em;
+      justify-content: center;
+
+      .transaction-history,
+      .stock-market {
+        width: 95%;
+        margin: 0 auto;
+      }
+
+      .positive {
+        color: green;
+      }
+
+      .negative {
+        color: red;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $small-desktop) {
+  .transactions-container {
+    padding: 0;
+
+    .transaction-toggle-button {
+      padding: 8px 16px;
+      margin: 0 5px;
+      border: 1px solid #ddd;
+      background: white;
+      cursor: pointer;
+
+      &.active {
+        background: #007bff;
+        color: white;
+        border-color: #007bff;
+      }
+    }
+
+    .income {
+      color: #28a745;
+    }
+
+    .expense {
+      color: #dc3545;
+    }
+
+    .chart-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      margin-bottom: 3rem;
+
+      .pie-chart {
+        grid-column: 1;
+        width: 500px;
+        margin: 0 auto;
+      }
+
+      .money-summary {
+        grid-column: 1;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .transactions-crud-buttons {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .history-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1em;
+      justify-content: center;
+
+      .transaction-history,
+      .stock-market {
+        width: 95%;
+        margin: 0 auto;
+      }
+
+      .positive {
+        color: green;
+      }
+
+      .negative {
+        color: red;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $large-mobile) {
+  .transactions-container {
+    padding: 0;
+
+    .transaction-toggle-button {
+      padding: 8px 16px;
+      margin: 0 5px;
+      border: 1px solid #ddd;
+      background: white;
+      cursor: pointer;
+
+      &.active {
+        background: #007bff;
+        color: white;
+        border-color: #007bff;
+      }
+    }
+
+    .income {
+      color: #28a745;
+    }
+
+    .expense {
+      color: #dc3545;
+    }
+
+    .chart-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      margin-bottom: 3rem;
+
+      .pie-chart {
+        grid-column: 1;
+        width: 400px;
+        margin: 0 auto;
+      }
+
+      .money-summary {
+        grid-column: 1;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .transactions-crud-buttons {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .history-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1em;
+      justify-content: center;
+
+      .transaction-history,
+      .stock-market {
+        width: 95%;
+        margin: 0 auto;
+      }
+
+      .positive {
+        color: green;
+      }
+
+      .negative {
+        color: red;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $medium-mobile) {
+  .transactions-container {
+    padding: 0;
+
+    .transaction-toggle-button {
+      padding: 8px 16px;
+      margin: 0 5px;
+      border: 1px solid #ddd;
+      background: white;
+      cursor: pointer;
+
+      &.active {
+        background: #007bff;
+        color: white;
+        border-color: #007bff;
+      }
+    }
+
+    .income {
+      color: #28a745;
+    }
+
+    .expense {
+      color: #dc3545;
+    }
+
+    .chart-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      margin-bottom: 3rem;
+      justify-content: center;
+
+      .pie-chart {
+        grid-column: 1;
+        width: 400px;
+      }
+
+      .money-summary {
+        grid-column: 1;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .transactions-crud-buttons {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .history-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1em;
+      justify-content: center;
+
+      .transaction-history,
+      .stock-market {
+        width: 95%;
+        margin: 0 auto;
+      }
+
+      .positive {
+        color: green;
+      }
+
+      .negative {
+        color: red;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $small-mobile) {
+  .transactions-container {
+    padding: 0;
+
+    .transaction-toggle-button {
+      padding: 8px 16px;
+      margin: 0 5px;
+      border: 1px solid #ddd;
+      background: white;
+      cursor: pointer;
+
+      &.active {
+        background: #007bff;
+        color: white;
+        border-color: #007bff;
+      }
+    }
+
+    .income {
+      color: #28a745;
+    }
+
+    .expense {
+      color: #dc3545;
+    }
+
+    .chart-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      margin-bottom: 3rem;
+
+      .pie-chart {
+        grid-column: 1;
+        width: 400px;
+        margin: 0 auto;
+      }
+
+      .money-summary {
+        grid-column: 1;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .transactions-crud-buttons {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .history-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1em;
+      justify-content: center;
+
+      .transaction-history,
+      .stock-market {
+        width: 95%;
+        margin: 0 auto;
+      }
+
+      .positive {
+        color: green;
+      }
+
+      .negative {
+        color: red;
+      }
     }
   }
 }

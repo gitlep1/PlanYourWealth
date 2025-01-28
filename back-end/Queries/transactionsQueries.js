@@ -1,8 +1,17 @@
 const db = require("../db/dbConfig.js");
 
 const getAllUsersTransactions = async (user_id) => {
-  const query =
-    "SELECT id, transaction_name, transaction_type, transaction_amount, transaction_date, transaction_category, transaction_note FROM transactions WHERE user_id = $1";
+  const query = `SELECT 
+      id,
+      transaction_name,
+      transaction_type,
+      transaction_amount,
+      transaction_date,
+      transaction_category,
+      transaction_note
+    FROM transactions
+    LEFT JOIN accounts ON transactions.account_id = accounts.id
+    WHERE user_id = $1`;
   const transactions = await db.any(query, user_id);
   return transactions;
 };

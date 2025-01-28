@@ -77,7 +77,7 @@ const App = () => {
 
   const resizeSidebar = () => {
     if (window.innerWidth > 1000) {
-      setResize("18%");
+      setResize("20%");
     }
     if (window.innerWidth <= 1000) {
       setResize("18%");

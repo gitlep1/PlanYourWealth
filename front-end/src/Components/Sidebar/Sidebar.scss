@@ -29,7 +29,7 @@
     position: relative;
     color: black;
     width: 85%;
-    height: 65%;
+    height: 60%;
     margin: 0 auto;
     overflow: auto;
     background-color: aliceblue;
@@ -42,12 +42,7 @@
     .sidebar-accounts {
       display: grid;
       margin-top: 3em;
-
-      .manage-accounts-item {
-        height: 5em;
-        width: 95%;
-        margin: 0 auto;
-      }
+      gap: 1em;
     }
   }
 }

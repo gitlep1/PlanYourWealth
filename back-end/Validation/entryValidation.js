@@ -62,9 +62,46 @@ const checkTransactionExtraEntries = (req, res, next) => {
   }
 };
 
+const checkAccountValues = (req, res, next) => {
+  if (
+    req.body.account_name &&
+    req.body.account_type &&
+    req.body.account_balance
+  ) {
+    next();
+  } else {
+    res.status(400).json({
+      error:
+        "You are missing required keys. Please make sure you have: name, type and balance.",
+    });
+  }
+};
+
+const checkAccountExtraEntries = (req, res, next) => {
+  const validFields = [
+    "account_name",
+    "account_type",
+    "account_balance",
+    "account_note",
+  ];
+  const keys = Object.keys(req.body);
+
+  const extraFields = keys.filter((key) => !validFields.includes(key));
+
+  if (extraFields.length > 0) {
+    res.status(400).json({
+      error: `You have extra keys: ${extraFields.join(", ")}.`,
+    });
+  } else {
+    next();
+  }
+};
+
 module.exports = {
   checkUserValues,
   checkUserExtraEntries,
   checkTransactionValues,
   checkTransactionExtraEntries,
+  checkAccountValues,
+  checkAccountExtraEntries,
 };

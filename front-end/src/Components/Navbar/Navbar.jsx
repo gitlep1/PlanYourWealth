@@ -33,8 +33,6 @@ export const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
   const [isSignin, setIsSignin] = useState(true);
 
-  const [error, setError] = useState(null);
-
   const handleShow = () => {
     setShowModal(true);
     handleClearForms();
@@ -106,10 +104,6 @@ export const Navbar = () => {
           SetCookies("authToken", res.data.token, 30);
 
           handleClose();
-
-          setTimeout(() => {
-            navigate("/");
-          }, 5000);
         })
         .catch((error) => {
           return toast.error(`Sign up failed: ${error.response.data.error}`, {

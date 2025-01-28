@@ -12,195 +12,178 @@ const {
 } = require("../Queries/accountsQueries");
 
 const {
-  checkUserValues,
-  checkUserExtraEntries,
+  checkAccountValues,
+  checkAccountExtraEntries,
 } = require("../Validation/entryValidation");
 const { requireAuth } = require("../Validation/requireAuth");
 const { scopeAuth } = require("../Validation/scopeAuth");
 
 accounts.get("/", requireAuth(), scopeAuth(["read:user"]), async (req, res) => {
   try {
-    const users = await getAllUsers();
-    console.log("=== GET Users ", { users }, "===");
+    const { token } = req.user;
+    const decoded = jwt.decode(token);
 
-    res.status(200).json({ payload: users });
+    const getUser = await getUserByID(decoded.user.id);
+    if (!getUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    const getAccounts = await getAllUsersAccounts(getUser.id);
+    console.log("=== GET Accounts ", { getAccounts }, "===");
+
+    res.status(200).json({ payload: getAccounts });
   } catch (err) {
-    console.error("500 Error during users get:", err);
+    console.error("500 Error during accounts get:", err);
     res.status(500).json({ error: err.message });
   }
 });
 
 accounts.get(
-  "/user",
+  "/account/:id",
   requireAuth(),
   scopeAuth(["read:user", "write:user"]),
   async (req, res) => {
     try {
+      const { id } = req.params;
       const { token } = req.user;
       const decoded = jwt.decode(token);
 
       const getUser = await getUserByID(decoded.user.id);
-      console.log("=== GET User by ID", { getUser }, "===");
+      if (!getUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
 
-      res.status(200).json({ payload: getUser });
+      const getAccount = await getAccountByID(id);
+      if (getUser.id !== getAccount.user_id) {
+        return res.status(403).json({ error: "Unauthorized" });
+      }
+
+      console.log("=== GET Account ", { getAccount }, "===");
+
+      res.status(200).json({ payload: getAccount });
     } catch (err) {
-      console.error("500 Error during user get ID:", err);
+      console.error("500 Error during account get ID:", err);
       res.status(500).json({ error: err.message });
     }
   }
 );
 
 accounts.post(
-  "/signup",
-  checkUserValues,
-  checkUserExtraEntries,
+  "/create-account",
+  requireAuth(),
+  scopeAuth(["read:user", "write:user"]),
+  checkAccountValues,
+  checkAccountExtraEntries,
   async (req, res) => {
     try {
-      const newUserData = {
-        username: req.body.username,
-        password: req.body.password,
-        email: req.body.email,
-      };
+      const { token } = req.user;
+      const decoded = jwt.decode(token);
 
-      const userExists = await checkIfUserExists(
-        newUserData.email,
-        newUserData.password
-      );
-      if (userExists) {
-        return res.status(400).json({ error: "User already exists" });
+      const getUser = await getUserByID(decoded.user.id);
+      if (!getUser) {
+        return res.status(404).json({ error: "User not found" });
       }
 
-      const newUser = await createUser(newUserData);
-      const userDataForClient = {
-        theme: newUser.theme,
-        email: newUser.email,
-        username: newUser.username,
-        profileimg: newUser.profileimg,
-        last_online: newUser.last_online,
+      const newAccountData = {
+        user_id: getUser.id,
+        account_name: req.body.account_name,
+        account_type: req.body.account_type,
+        account_balance: req.body.account_balance,
+        account_note: req.body.account_note,
+      };
+      const newAccount = await createAccount(newAccountData);
+      console.log("=== POST Account ", { newAccount }, "===");
+
+      const accountDataForClient = {
+        id: newAccount.id,
+        account_name: newAccount.account_name,
+        account_type: newAccount.account_type,
+        account_balance: newAccount.account_balance,
+        account_note: newAccount.account_note,
       };
 
-      const clientTokenPayload = {
-        user: newUser,
-        scopes: ["read:user", "write:user"],
-      };
-      console.log(
-        "=== POST User (signup) (clientTokenPayload)",
-        { clientTokenPayload },
-        "==="
-      );
-      const token = jwt.sign(clientTokenPayload, JWTS, {
-        expiresIn: "30d",
-      });
-
-      res.status(200).json({ payload: userDataForClient, token });
+      res.status(200).json({ payload: accountDataForClient });
     } catch (err) {
-      console.error("500 Error during user post:", err);
+      console.error("500 Error during account post:", err);
       res.status(500).json({ error: err.message });
     }
   }
 );
 
-users.post("/signin", async (req, res) => {
-  try {
-    const userData = {
-      email: req.body.email,
-      password: req.body.password,
-    };
+accounts.put(
+  "/account/:id",
+  requireAuth(),
+  scopeAuth(["read:user", "write:user"]),
+  checkAccountValues,
+  checkAccountExtraEntries,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { token } = req.user;
+      const decoded = jwt.decode(token);
 
-    const checkUser = await checkIfUserExists(userData);
-    if (checkUser) {
-      const userDataForClient = {
-        theme: checkUser.theme || null,
-        email: checkUser.email,
-        username: checkUser.username,
-        profileimg: checkUser.profileimg || null,
-        last_online: checkUser.last_online,
+      const getUser = await getUserByID(decoded.user.id);
+      if (!getUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      const account = await getAccountByID(id);
+      if (getUser.id !== account.user_id) {
+        return res.status(403).json({ error: "Unauthorized" });
+      }
+
+      const updatedAccountData = {
+        account_name: req.body.account_name,
+        account_type: req.body.account_type,
+        account_balance: req.body.account_balance,
+        account_note: req.body.account_note,
+      };
+      const updatedAccount = await updateAccount(id, updatedAccountData);
+      console.log("=== PUT Account ", { updatedAccount }, "===");
+
+      const accountDataForClient = {
+        id: updatedAccount.id,
+        account_name: updatedAccount.account_name,
+        account_type: updatedAccount.account_type,
+        account_balance: updatedAccount.account_balance,
+        account_note: updatedAccount.account_note,
       };
 
-      const clientTokenPayload = {
-        user: checkUser,
-        scopes: ["read:user", "write:user"],
-      };
-      const token = jwt.sign(clientTokenPayload, JWTS, {
-        expiresIn: "30d",
-      });
-      console.log(
-        "=== POST User (signin) (clientTokenPayload)",
-        { clientTokenPayload, token },
-        "==="
-      );
-
-      res.status(200).json({ payload: userDataForClient, token });
-    } else {
-      return res
-        .status(400)
-        .json({ error: "No users with these credentials found" });
+      res.status(200).json({ payload: accountDataForClient });
+    } catch (err) {
+      console.error("500 Error during account put:", err);
+      res.status(500).json({ error: err.message });
     }
-  } catch (err) {
-    console.error("500 Error during users (signin) get:", err);
-    res.status(500).json({ error: err.message });
   }
-});
+);
 
-users.put(
-  "/user",
+accounts.delete(
+  "/account/:id",
   requireAuth(),
   scopeAuth(["read:user", "write:user"]),
   async (req, res) => {
     try {
+      const { id } = req.params;
       const { token } = req.user;
       const decoded = jwt.decode(token);
 
-      const { profileimg, email, username, password, theme } = req.body;
+      const getUser = await getUserByID(decoded.user.id);
+      if (!getUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
 
-      const oldUserData = await getUserByID(decoded.user.id);
+      const isAccountOwner = await getAccountByID(id);
+      if (getUser.id !== isAccountOwner.user_id) {
+        return res.status(403).json({ error: "Unauthorized" });
+      }
 
-      const newUserData = {
-        profileimg: profileimg !== "" ? profileimg : oldUserData.profileimg,
-        email: email !== "" ? email : oldUserData.email,
-        username: username !== "" ? username : oldUserData.username,
-        password: password !== "" ? password : oldUserData.password,
-        theme: theme !== "" ? theme : oldUserData.theme,
-        last_online: new Date().toISOString(),
-      };
+      const deletedAccount = await deleteAccount(id);
+      console.log("=== DELETE Account ", { deletedAccount }, "===");
 
-      const updatedUser = await updateUser(decoded.user.id, newUserData);
-      console.log("=== PUT User ", { updatedUser }, "===");
-
-      const userDataForClient = {
-        theme: updatedUser.theme,
-        email: updatedUser.email,
-        username: updatedUser.username,
-        profileimg: updatedUser.profileimg,
-        last_online: updatedUser.last_online,
-      };
-
-      res.status(200).json({ payload: userDataForClient });
+      res.status(200).json({ payload: deletedAccount });
     } catch (err) {
-      console.error("500 Error during user put:", err);
+      console.error("500 Error during account delete:", err);
       res.status(500).json({ error: err.message });
     }
   }
 );
 
-users.delete(
-  "/user",
-  requireAuth(),
-  scopeAuth(["read:user", "write:user"]),
-  async (req, res) => {
-    try {
-      const { token } = req.user;
-      const decoded = jwt.decode(token);
-
-      const deletedUser = await deleteUser(decoded.user.id);
-      console.log("=== DELETE User ", { deletedUser }, "===");
-
-      res.status(200).json({ payload: deletedUser });
-    } catch (err) {
-      console.error("500 Error during user delete:", err);
-      res.status(500).json({ error: err.message });
-    }
-  }
-);
-
-module.exports = users;
+module.exports = accounts;

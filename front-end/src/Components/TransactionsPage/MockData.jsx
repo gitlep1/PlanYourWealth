@@ -1,8 +1,16 @@
 import "./Transactions.scss";
 import { useState, useEffect } from "react";
-import { Table, Button, Modal, Form } from "react-bootstrap";
+import {
+  Table,
+  Button,
+  Modal,
+  Form,
+  Dropdown,
+  DropdownButton,
+} from "react-bootstrap";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { SetCookies } from "../../CustomFunctions/HandleCookies";
 
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
@@ -102,21 +110,29 @@ export const MockTransactionsPage = () => {
     }
   };
 
+  const handleSelect = (eventKey) => {
+    setType(eventKey);
+  };
+
   const renderModalContent = () => {
     if (modalAction === "add") {
       return (
         <Form>
           <Form.Group controlId="formType">
             <Form.Label>Type</Form.Label>
-            <Form.Control
-              as="select"
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              placeholder="Select type"
+            <DropdownButton
+              id="dropdown-basic-button"
+              title={
+                type
+                  ? type.charAt(0).toUpperCase() + type.slice(1)
+                  : "Select type"
+              }
+              onSelect={handleSelect}
+              variant="primary"
             >
-              <option value="expenses">Expenses</option>
-              <option value="income">Income</option>
-            </Form.Control>
+              <Dropdown.Item eventKey="expenses">Expenses</Dropdown.Item>
+              <Dropdown.Item eventKey="income">Income</Dropdown.Item>
+            </DropdownButton>
           </Form.Group>
 
           <Form.Group controlId="formName">
@@ -165,15 +181,19 @@ export const MockTransactionsPage = () => {
 
           <Form.Group controlId="formType">
             <Form.Label>Type</Form.Label>
-            <Form.Control
-              as="select"
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              placeholder="Select type"
+            <DropdownButton
+              id="dropdown-basic-button"
+              title={
+                type
+                  ? type.charAt(0).toUpperCase() + type.slice(1)
+                  : "Select type"
+              }
+              onSelect={handleSelect}
+              variant="primary"
             >
-              <option value="expenses">Expenses</option>
-              <option value="income">Income</option>
-            </Form.Control>
+              <Dropdown.Item eventKey="expenses">Expenses</Dropdown.Item>
+              <Dropdown.Item eventKey="income">Income</Dropdown.Item>
+            </DropdownButton>
           </Form.Group>
 
           <Form.Group controlId="formName">
@@ -255,16 +275,16 @@ export const MockTransactionsPage = () => {
         date,
         name,
       });
-    } else if (modalAction === "edit") {
+    } else if (modalAction === "edit" && transactionID) {
       editTransaction({
-        id: transactionID,
+        id: parseInt(transactionID),
         type,
         amount: parseFloat(amount),
         date,
         name,
       });
-    } else if (modalAction === "delete") {
-      deleteTransaction(transactionID);
+    } else if (modalAction === "delete" && transactionID) {
+      deleteTransaction(parseInt(transactionID));
     }
     closeModal();
   };
@@ -306,6 +326,11 @@ export const MockTransactionsPage = () => {
     .filter((t) => t.type === "income")
     .reduce((acc, t) => acc + t.amount, 0);
 
+  const expirationDate = new Date();
+  expirationDate.setDate(expirationDate.getDate() + 1);
+  SetCookies("totalExpenses", totalExpenses, expirationDate);
+  SetCookies("totalIncome", totalIncome, expirationDate);
+
   if (transactionType === "expenses") {
     const filteredIncome = transactions.filter((t) => t.type === "expenses");
     const labels = filteredIncome.map((t) => t.name);
@@ -341,7 +366,7 @@ export const MockTransactionsPage = () => {
   return (
     <div className="transactions-container">
       <div className="transaction-header">
-        <h2>Mock Transactions</h2>
+        <h2>Preview Transactions</h2>
         <p>Please create an acount for a more personlized experience</p>
         <div className="transaction-toggle">
           <button
