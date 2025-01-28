@@ -4,12 +4,21 @@ Plan Your Wealth is a full-stack financial management application that enables u
 
 ## Table of Contents
 
+- [Deployed Links](#deployed-links)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Database Schema](#database-schema)
 - [Setup Instructions](#setup-instructions)
 - [Backend Dependencies](#backend-dependencies)
 - [Frontend Dependencies](#frontend-dependencies)
+
+---
+
+## Deployed Links
+
+[Front-End](https://plan-your-wealth.vercel.app)
+[Back-End](https://plan-your-wealth-api.vercel.app)
+[GitHub-MonoRepo](https://github.com/gitlep1/PlanYourWealth)
 
 ---
 
