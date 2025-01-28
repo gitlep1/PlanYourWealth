@@ -24,7 +24,7 @@ export const Desktop = ({ handleSidebarOpen, isOpen, resize }) => {
           onClick={() => handleSidebarOpen(!isOpen)}
         >
           <span className="sidebar-open-button-text">
-            {isOpen ? "Collapse" : "Expand"}
+            {isOpen ? "Close" : "Account Overview"}
           </span>
         </div>
       </div>

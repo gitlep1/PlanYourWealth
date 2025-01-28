@@ -2,9 +2,7 @@ const db = require("../db/dbConfig.js");
 
 const getAllUsersAccounts = async (userID) => {
   const query = `
-  SELECT * 
-  FROM transactions
-  LEFT JOIN accounts ON transactions.user_id = accounts.user_id
+  SELECT * accounts 
   WHERE transactions.user_id = $1
   ORDER BY transactions.date DESC
   `;

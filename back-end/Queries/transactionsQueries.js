@@ -10,7 +10,6 @@ const getAllUsersTransactions = async (user_id) => {
       transaction_category,
       transaction_note
     FROM transactions
-    LEFT JOIN accounts ON transactions.account_id = accounts.id
     WHERE user_id = $1`;
   const transactions = await db.any(query, user_id);
   return transactions;
