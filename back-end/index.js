@@ -21,7 +21,7 @@ const corsOptions = {
   origin: (origin, callback) => {
     if (
       allowedOrigins.includes(origin) ||
-      (origin && origin.endsWith(".vercel.app"))
+      (origin && origin.endsWith("*.vercel.app"))
     ) {
       callback(null, true);
     } else {
