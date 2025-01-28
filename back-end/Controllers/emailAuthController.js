@@ -9,6 +9,8 @@ const {
   deleteEmailVerification,
 } = require("../Queries/emailAuthQueries");
 
+const { checkIfUserExistsByEmail } = require("../Queries/usersQueries");
+
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
   port: 2525,
@@ -26,6 +28,11 @@ emailAuth.post("/send-verification", async (req, res) => {
   const { email } = req.body;
 
   try {
+    const userExists = await checkIfUserExistsByEmail(email);
+    if (userExists) {
+      return res.status(400).json({ message: "Email already exists." });
+    }
+
     const code = generateCode();
 
     const createdEmailAuth = await createEmailVerification(email, code);

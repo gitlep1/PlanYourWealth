@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 import { MockTransactionsPage } from "./MockData";
-import { UsersTransactionsPage } from "./UsersData";
+import { UsersTransactionsPage } from "./UsersData/UsersData";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

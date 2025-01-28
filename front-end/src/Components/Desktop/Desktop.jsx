@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 
 import { Sidebar } from "../Sidebar/Sidebar";
 import { Homepage } from "../HomePage/Homepage";
+import { EmailVerification } from "../AccountPage/EmailVerification";
 import { TransactionsPage } from "../TransactionsPage/Transactions";
 import { Accountpage } from "../AccountPage/Account";
 import { About } from "../AboutPage/About";
@@ -32,6 +33,7 @@ export const Desktop = ({ handleSidebarOpen, isOpen, resize }) => {
         <Routes>
           <Route path="/">
             <Route path="/" index element={<Homepage />} />
+            <Route path="verify-email" element={<EmailVerification />} />
             <Route path="dashboard" element={<TransactionsPage />} />
             <Route path="account-settings" element={<Accountpage />} />
             <Route path="about" element={<About />} />

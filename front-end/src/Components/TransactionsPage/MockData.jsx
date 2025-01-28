@@ -341,7 +341,8 @@ export const MockTransactionsPage = () => {
   return (
     <div className="transactions-container">
       <div className="transaction-header">
-        <h2>Transactions</h2>
+        <h2>Mock Transactions</h2>
+        <p>Please create an acount for a more personlized experience</p>
         <div className="transaction-toggle">
           <button
             className={`transaction-toggle-button ${

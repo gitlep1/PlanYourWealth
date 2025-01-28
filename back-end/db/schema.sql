@@ -37,14 +37,14 @@ CREATE TABLE transactions (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
-DROP TABLE IF EXISTS investments;
-CREATE TABLE investments (
+
+DROP TABLE IF EXISTS accounts;
+CREATE TABLE accounts (
   id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-  investment_name TEXT NOT NULL,
-  investment_amount INT NOT NULL,
-  investment_date DATE NOT NULL,
-  investment_category TEXT,
-  investment_note TEXT,
+  account_name TEXT NOT NULL,
+  account_type TEXT NOT NULL,
+  account_balance INT NOT NULL,
+  account_note TEXT,
   created_at TIMESTAMP DEFAULT NOW()
 );

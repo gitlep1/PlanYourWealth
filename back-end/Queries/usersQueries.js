@@ -58,6 +58,17 @@ const checkIfUserExists = async (userData) => {
   return user;
 };
 
+const checkIfUserExistsByEmail = async (email) => {
+  const query = "SELECT * FROM users WHERE email = $1";
+  const user = await db.oneOrNone(query, email);
+
+  if (!user) {
+    return null;
+  }
+
+  return user;
+};
+
 module.exports = {
   getAllUsers,
   getUserByID,
@@ -65,4 +76,5 @@ module.exports = {
   updateUser,
   deleteUser,
   checkIfUserExists,
+  checkIfUserExistsByEmail,
 };

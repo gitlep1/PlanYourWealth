@@ -7,9 +7,9 @@ import Cookies from "js-cookie";
 import axios from "axios";
 
 import { userContext, tokenContext } from "../../CustomContexts/Contexts";
-import { GoogleAuth } from "./GoogleAuth/GoogleAuth";
-
 import { RemoveCookies } from "../../CustomFunctions/HandleCookies";
+
+import { EmailVerification } from "./EmailVerification";
 
 const API = import.meta.env.VITE_PUBLIC_API_BASE;
 

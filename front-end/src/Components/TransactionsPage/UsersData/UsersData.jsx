@@ -1,22 +1,25 @@
-import "./Transactions.scss";
+import "../Transactions.scss";
 import { useState, useEffect } from "react";
-import { Table, Button, Modal, Form } from "react-bootstrap";
+import {
+  Table,
+  Button,
+  Modal,
+  Form,
+  Dropdown,
+  DropdownButton,
+} from "react-bootstrap";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { Pie } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-
+import { toast } from "react-toastify";
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
-import { toast } from "react-toastify";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+import { Expenses } from "./Expenses";
+import { Incomes } from "./Income";
 
 const API = import.meta.env.VITE_PUBLIC_API_BASE;
 
 export const UsersTransactionsPage = () => {
-  let pieChartData = {};
-
   const authToken = Cookies.get("authToken") || null;
 
   const [showModal, setShowModal] = useState(false);
@@ -30,6 +33,8 @@ export const UsersTransactionsPage = () => {
   const [transactionID, setTransactionID] = useState(null);
   const [transactionType, setTransactionType] = useState("expenses");
   const [transactions, setTransactions] = useState([]);
+  const [expenseTransactions, setExpenseTransactions] = useState([]);
+  const [incomeTransactions, setIncomeTransactions] = useState([]);
   const [error, setError] = useState(null);
 
   const stockData = [
@@ -55,9 +60,19 @@ export const UsersTransactionsPage = () => {
       })
       .then((res) => {
         setTransactions(res.data.payload);
+
+        const expenses = res.data.payload.filter(
+          (transaction) => transaction.transaction_type === "expenses"
+        );
+        setExpenseTransactions(expenses);
+
+        const income = res.data.payload.filter(
+          (transaction) => transaction.transaction_type === "income"
+        );
+        setIncomeTransactions(income);
       })
       .catch((err) => {
-        setError(err);
+        setError(err.response.data.error);
       });
   };
 
@@ -98,22 +113,29 @@ export const UsersTransactionsPage = () => {
     }
   };
 
+  const handleSelect = (eventKey) => {
+    setType(eventKey);
+  };
+
   const renderModalContent = () => {
     if (modalAction === "add") {
       return (
         <Form>
           <Form.Group controlId="formType">
             <Form.Label>Type</Form.Label>
-            <Form.Control
-              as="select"
-              required
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              placeholder="Select type"
+            <DropdownButton
+              id="dropdown-basic-button"
+              title={
+                type
+                  ? type.charAt(0).toUpperCase() + type.slice(1)
+                  : "Select type"
+              }
+              onSelect={handleSelect}
+              variant="primary"
             >
-              <option value="expenses">Expenses</option>
-              <option value="income">Income</option>
-            </Form.Control>
+              <Dropdown.Item eventKey="expenses">Expenses</Dropdown.Item>
+              <Dropdown.Item eventKey="income">Income</Dropdown.Item>
+            </DropdownButton>
           </Form.Group>
 
           <Form.Group controlId="formName">
@@ -272,10 +294,12 @@ export const UsersTransactionsPage = () => {
           },
         })
         .then((res) => {
-          setTransactions((prev) => [...prev, res.data.payload]);
+          getUsersTransactions();
         })
         .catch((err) => {
-          setError(err);
+          return toast.error(`${err.response.data.error}`, {
+            containerId: "toast-notify",
+          });
         });
     } else {
       return toast.error(
@@ -356,55 +380,21 @@ export const UsersTransactionsPage = () => {
     );
   };
 
-  const totalExpenses = transactions
-    .filter((t) => t.transaction_type === "expenses")
-    .reduce((acc, t) => acc + t.transaction_amount, 0);
+  const totalExpenses = expenseTransactions.reduce(
+    (acc, t) => acc + t.transaction_amount,
+    0
+  );
 
-  const totalIncome = transactions
-    .filter((t) => t.transaction_type === "income")
-    .reduce((acc, t) => acc + t.transaction_amount, 0);
-
-  if (transactionType === "expenses") {
-    const filteredIncome = transactions.filter(
-      (t) => t.transaction_type === "expenses"
-    );
-    const labels = filteredIncome.map((t) => t.transaction_name);
-    const data = filteredIncome.map((t) => t.transaction_amount);
-
-    pieChartData = {
-      labels,
-      datasets: [
-        {
-          data,
-          backgroundColor: ["#FF6384", "#36A2EB"],
-          hoverBackgroundColor: ["#FF6384", "#36A2EB"],
-        },
-      ],
-    };
-  }
-  if (transactionType === "income") {
-    const filteredIncome = transactions.filter(
-      (t) => t.transaction_type === "income"
-    );
-    const labels = filteredIncome.map((t) => t.transaction_name);
-    const data = filteredIncome.map((t) => t.transaction_amount);
-
-    pieChartData = {
-      labels,
-      datasets: [
-        {
-          data,
-          backgroundColor: ["#4CAF50", "#FFC107"],
-          hoverBackgroundColor: ["#4CAF50", "#FFC107"],
-        },
-      ],
-    };
-  }
+  const totalIncome = incomeTransactions.reduce(
+    (acc, t) => acc + t.transaction_amount,
+    0
+  );
 
   return (
     <div className="transactions-container">
       <div className="transaction-header">
         <h2>Transactions</h2>
+        {error && <p>{error}</p>}
         <div className="transaction-toggle">
           <button
             className={`transaction-toggle-button ${
@@ -428,15 +418,16 @@ export const UsersTransactionsPage = () => {
       <div className="chart-section">
         <div className="pie-chart">
           <h3>Money Flow</h3>
-          {transactions.length > 0 ? (
-            <Pie data={pieChartData} />
+          {transactionType === "expenses" ? (
+            <Expenses expenseTransactions={expenseTransactions} />
           ) : (
-            <p>No data available</p>
+            <Incomes incomeTransactions={incomeTransactions} />
           )}
         </div>
+
         <div className="money-summary">
           <h3>Money In/Out</h3>
-          {transactions.length > 0 ? (
+          {expenseTransactions.length > 0 || incomeTransactions.length > 0 ? (
             <>
               <p>
                 <strong>Total Income:</strong> ${totalIncome.toFixed(2)}
@@ -510,7 +501,6 @@ export const UsersTransactionsPage = () => {
                           : "income"
                       }
                     >
-                      ${transaction.transaction_amount.toFixed(2)}
                       <span>
                         {transaction.transaction_type === "expenses" ? (
                           <FaMinus />
@@ -518,6 +508,7 @@ export const UsersTransactionsPage = () => {
                           <FaPlus />
                         )}
                       </span>
+                      <br />${transaction.transaction_amount.toFixed(2)}
                     </td>
                     <td>{transaction.transaction_date}</td>
                   </tr>

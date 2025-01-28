@@ -38,7 +38,7 @@ export const Homepage = () => {
       <Button
         className="get-started-button"
         onClick={() => {
-          navigate("/transactions");
+          navigate("/dashboard");
         }}
       >
         Get Started

@@ -1,10 +1,8 @@
 import "./Navbar.scss";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Image, Form, Modal, Button } from "react-bootstrap";
+import { Form, Modal, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { IoIosSunny } from "react-icons/io";
-import { FaMoon } from "react-icons/fa";
 import axios from "axios";
 
 import {
@@ -14,7 +12,6 @@ import {
   tokenContext,
 } from "../../CustomContexts/Contexts";
 import { SetCookies } from "../../CustomFunctions/HandleCookies";
-import PlanYourWealthImage from "../../Images/PlanYourWealth-Icon.png";
 
 import { NavbarMobile } from "./Navbar-Mobile/Navbar-Mobile";
 import { NavbarDesktop } from "./Navbar-Desktop/Navbar-Desktop";
@@ -35,7 +32,6 @@ export const Navbar = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [isSignin, setIsSignin] = useState(true);
-  const [codeInput, setCodeInput] = useState("");
 
   const [error, setError] = useState(null);
 
@@ -94,52 +90,26 @@ export const Navbar = () => {
         });
       }
 
-      // const userData = {
-      //   email,
-      // };
-
-      // await axios
-      //   .post(`${API}/email/send-verification`, userData)
-      //   .then((res) => {
-      //     toast.success(res.data.message, {
-      //       containerId: "toast-notify",
-      //     });
-      //   })
-      //   .catch((err) => {
-      //     setError(err.response.data.error);
-      //   });
+      const userData = {
+        email,
+      };
 
       await axios
-        .post(`${API}/users/signup`, userData)
+        .post(`${API}/email/send-verification`, userData)
         .then((res) => {
-          toast.success(
-            `Welcome ${res.data.payload.username}, You have been signed up successfully.`,
-            {
-              containerId: "toast-notify",
-            }
-          );
-          setAuthUser(res.data.payload);
-          setAuthToken(res.data.token);
-
-          SetCookies("authUser", res.data.payload, 30);
-          SetCookies("authToken", res.data.token, 30);
-
           handleClose();
-
-          setTimeout(() => {
-            navigate("/");
-          }, 5000);
-        })
-        .catch((error) => {
-          return toast.error(`Sign up failed: ${error.response.data.error}`, {
-            containerId: "toast-notify",
+          navigate("/verify-email", {
+            state: {
+              email: email,
+              username: username,
+              password: password,
+            },
           });
+        })
+        .catch((err) => {
+          setError(err.response.data.error);
         });
     }
-  };
-
-  const displayVerificationToast = () => {
-    let code = null;
   };
 
   const handleClearForms = () => {

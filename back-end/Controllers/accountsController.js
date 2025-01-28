@@ -1,15 +1,8 @@
 const express = require("express");
-const users = express.Router();
+const accounts = express.Router();
 const jwt = require("jsonwebtoken");
 
-const {
-  getAllUsers,
-  getUserByID,
-  createUser,
-  updateUser,
-  deleteUser,
-  checkIfUserExists,
-} = require("../Queries/usersQueries");
+const { getUserByID } = require("../Queries/usersQueries");
 
 const {
   checkUserValues,
@@ -18,9 +11,7 @@ const {
 const { requireAuth } = require("../Validation/requireAuth");
 const { scopeAuth } = require("../Validation/scopeAuth");
 
-const JWTS = process.env.JWT_SECRET;
-
-users.get("/", requireAuth(), scopeAuth(["read:user"]), async (req, res) => {
+accounts.get("/", requireAuth(), scopeAuth(["read:user"]), async (req, res) => {
   try {
     const users = await getAllUsers();
     console.log("=== GET Users ", { users }, "===");
@@ -32,7 +23,7 @@ users.get("/", requireAuth(), scopeAuth(["read:user"]), async (req, res) => {
   }
 });
 
-users.get(
+accounts.get(
   "/user",
   requireAuth(),
   scopeAuth(["read:user", "write:user"]),
@@ -52,7 +43,7 @@ users.get(
   }
 );
 
-users.post(
+accounts.post(
   "/signup",
   checkUserValues,
   checkUserExtraEntries,

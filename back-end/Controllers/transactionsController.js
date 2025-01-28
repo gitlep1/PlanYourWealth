@@ -19,6 +19,21 @@ const {
 const { requireAuth } = require("../Validation/requireAuth");
 const { scopeAuth } = require("../Validation/scopeAuth");
 
+const formatTransactionDate = (date) => {
+  const options = { month: "short", day: "numeric", year: "numeric" };
+  console.log("date", date);
+  const formattedDate = new Date(date).toLocaleDateString("en-US", options);
+  if (formattedDate === "Invalid Date") {
+    return date;
+  }
+
+  const day = new Date(date).getDate();
+  const dayWithSuffix =
+    day + (["th", "st", "nd", "rd"][((day % 10) - 1) % 10] || "th");
+
+  return formattedDate.replace(day.toString(), dayWithSuffix);
+};
+
 transactions.get(
   "/",
   requireAuth(),
@@ -30,9 +45,23 @@ transactions.get(
 
       const getUser = await getUserByID(decoded.user.id);
       const transactions = await getAllUsersTransactions(getUser.id);
+
+      if (!transactions) {
+        return res
+          .status(404)
+          .json({ error: "No transactions found for this user." });
+      }
+
+      const formatDate = transactions.map((transaction) => {
+        return {
+          ...transaction,
+          transaction_date: formatTransactionDate(transaction.transaction_date),
+        };
+      });
+
       console.log("=== GET all usersTransactions ", { transactions }, "===");
 
-      res.status(200).json({ payload: transactions });
+      res.status(200).json({ payload: formatDate });
     } catch (err) {
       console.error("500 Error during transactions get:", err);
       res.status(500).json({ error: err.message });
@@ -61,7 +90,7 @@ transactions.get(
         transaction_name: transaction.transaction_name,
         transaction_type: transaction.transaction_type,
         transaction_amount: transaction.transaction_amount,
-        transaction_date: transaction.transaction_date,
+        transaction_date: formatTransactionDate(transaction.transaction_date),
         transaction_category: transaction.transaction_category,
         transaction_note: transaction.transaction_note,
       };
@@ -108,7 +137,9 @@ transactions.post(
         transaction_name: newTransaction.transaction_name,
         transaction_type: newTransaction.transaction_type,
         transaction_amount: newTransaction.transaction_amount,
-        transaction_date: newTransaction.transaction_date,
+        transaction_date: formatTransactionDate(
+          newTransaction.transaction_date
+        ),
         transaction_category: newTransaction.transaction_category,
         transaction_note: newTransaction.transaction_note,
       };
@@ -157,7 +188,9 @@ transactions.put(
         transaction_name: updatedTransaction.transaction_name,
         transaction_type: updatedTransaction.transaction_type,
         transaction_amount: updatedTransaction.transaction_amount,
-        transaction_date: updatedTransaction.transaction_date,
+        transaction_date: formatTransactionDate(
+          updatedTransaction.transaction_date
+        ),
         transaction_category: updatedTransaction.transaction_category,
         transaction_note: updatedTransaction.transaction_note,
       };
@@ -193,7 +226,9 @@ transactions.delete(
         transaction_name: deletedTransaction.transaction_name,
         transaction_type: deletedTransaction.transaction_type,
         transaction_amount: deletedTransaction.transaction_amount,
-        transaction_date: deletedTransaction.transaction_date,
+        transaction_date: formatTransactionDate(
+          deletedTransaction.transaction_date
+        ),
         transaction_category: deletedTransaction.transaction_category,
         transaction_note: deletedTransaction.transaction_note,
       };
