@@ -19,8 +19,6 @@ import { NavbarDesktop } from "./Navbar-Desktop/Navbar-Desktop";
 const API = import.meta.env.VITE_PUBLIC_API_BASE;
 
 export const Navbar = () => {
-  const navigate = useNavigate();
-
   const screenVersion = useContext(screenVersionContext);
   const { themeState, setThemeState } = useContext(themeContext);
   const { authUser, setAuthUser } = useContext(userContext);
@@ -71,10 +69,6 @@ export const Navbar = () => {
           SetCookies("authToken", res.data.token, 30);
 
           handleClose();
-
-          setTimeout(() => {
-            navigate("/");
-          }, 5000);
         })
         .catch((error) => {
           return toast.error(`Sign in failed: ${error.response.data.error}`, {

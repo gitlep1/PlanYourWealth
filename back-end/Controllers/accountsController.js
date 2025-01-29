@@ -83,12 +83,15 @@ accounts.post(
         return res.status(404).json({ error: "User not found" });
       }
 
+      const { account_name, account_type, account_balance, account_note } =
+        req.body;
+
       const newAccountData = {
         user_id: getUser.id,
-        account_name: req.body.account_name,
-        account_type: req.body.account_type,
-        account_balance: req.body.account_balance,
-        account_note: req.body.account_note,
+        account_name,
+        account_type,
+        account_balance,
+        account_note,
       };
       const newAccount = await createAccount(newAccountData);
       console.log("=== POST Account ", { newAccount }, "===");

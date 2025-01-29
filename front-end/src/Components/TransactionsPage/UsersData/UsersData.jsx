@@ -103,13 +103,17 @@ export const UsersTransactionsPage = () => {
     if (transaction) {
       setType(transaction.transaction_type);
       setAmount(transaction.transaction_amount);
-      setDate(transaction.transaction_date);
+      setDate(formatTransactionDateComputer(transaction.transaction_date));
       setName(transaction.transaction_name);
+      setCategory(transaction.transaction_category);
+      setNote(transaction.transaction_note);
     } else {
       setType("expenses");
       setAmount("");
       setDate("");
       setName("");
+      setCategory("");
+      setNote("");
     }
   };
 
@@ -251,6 +255,26 @@ export const UsersTransactionsPage = () => {
               placeholder="Enter date"
             />
           </Form.Group>
+
+          <Form.Group controlId="formCategory">
+            <Form.Label>Category</Form.Label>
+            <Form.Control
+              type="text"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              placeholder="(Optional) Enter category"
+            />
+          </Form.Group>
+
+          <Form.Group controlId="formNote">
+            <Form.Label>Note</Form.Label>
+            <Form.Control
+              type="text"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="(Optional) Enter note"
+            />
+          </Form.Group>
         </Form>
       );
     } else if (modalAction === "delete") {
@@ -259,7 +283,7 @@ export const UsersTransactionsPage = () => {
           <Form.Group controlId="formID">
             <Form.Label>ID</Form.Label>
             <Form.Control
-              type="number"
+              type="text"
               value={transactionID || ""}
               onChange={(e) => handleTransactionIDChange(e.target.value)}
               placeholder="Enter ID"
@@ -287,7 +311,14 @@ export const UsersTransactionsPage = () => {
     return true;
   };
 
-  const formatTransactionDate = (date) => {
+  const formatTransactionDateComputer = (date) => {
+    const year = new Date(date).getFullYear();
+    const month = String(new Date(date).getMonth() + 1).padStart(2, "0");
+    const day = String(new Date(date).getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const formatTransactionDateHuman = (date) => {
     const options = { month: "short", day: "numeric", year: "numeric" };
     const formattedDate = new Date(date).toLocaleDateString("en-US", options);
     if (formattedDate === "Invalid Date") {
@@ -384,10 +415,12 @@ export const UsersTransactionsPage = () => {
     } else if (modalAction === "edit") {
       editTransaction({
         id: transactionID,
-        type,
-        name,
-        amount: parseFloat(amount),
-        date,
+        transaction_name: name,
+        transaction_type: type,
+        transaction_amount: parseFloat(amount),
+        transaction_date: date,
+        transaction_category: category,
+        transaction_note: note,
       });
     } else if (modalAction === "delete") {
       deleteTransaction(transactionID);
@@ -555,7 +588,7 @@ export const UsersTransactionsPage = () => {
                       <br />${transaction.transaction_amount.toFixed(2)}
                     </td>
                     <td>
-                      {formatTransactionDate(transaction.transaction_date)}
+                      {formatTransactionDateHuman(transaction.transaction_date)}
                     </td>
                   </tr>
                 );

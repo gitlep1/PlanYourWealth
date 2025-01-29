@@ -5,6 +5,7 @@
   background-color: #242424;
 
   .sidebar-content {
+    color: white;
     height: 95%;
   }
 
@@ -37,6 +38,13 @@
     .sidebar-add-account-button {
       position: absolute;
       left: 0;
+      font-size: 3rem;
+      background-color: #007bff;
+
+      &:hover {
+        cursor: pointer;
+        background-color: #0033ff;
+      }
     }
 
     .sidebar-accounts {

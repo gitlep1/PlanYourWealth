@@ -2,9 +2,8 @@ const db = require("../db/dbConfig.js");
 
 const getAllUsersAccounts = async (userID) => {
   const query = `
-  SELECT * accounts 
-  WHERE transactions.user_id = $1
-  ORDER BY transactions.date DESC
+  SELECT * FROM accounts 
+  WHERE user_id = $1
   `;
   const accounts = await db.any(query, userID);
   return accounts;
@@ -18,8 +17,9 @@ const getAccountByID = async (id) => {
 
 const createAccount = async (account) => {
   const query =
-    "INSERT INTO accounts (account_name, account_type, account_balance, account_note) VALUES ($1, $2, $3, $4) RETURNING *";
+    "INSERT INTO accounts (user_id, account_name, account_type, account_balance, account_note) VALUES ($1, $2, $3, $4, $5) RETURNING *";
   const newAccount = await db.oneOrNone(query, [
+    account.user_id,
     account.account_name,
     account.account_type,
     account.account_balance,
