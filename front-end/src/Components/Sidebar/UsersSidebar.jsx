@@ -7,6 +7,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 import { FaPlus } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 import { userContext, tokenContext } from "../../CustomContexts/Contexts";
 
@@ -18,6 +20,7 @@ export const UsersSidebar = () => {
   const { authUser } = useContext(userContext);
 
   const [accounts, setAccounts] = useState([]);
+  const [editValue, setEditValue] = useState("");
   const [accountName, setAccountName] = useState("");
   const [accountType, setAccountType] = useState("");
   const [accountBalance, setAccountBalance] = useState("");
@@ -150,6 +153,69 @@ export const UsersSidebar = () => {
     );
   };
 
+  const deleteAccount = async (id) => {
+    const token = JSON.parse(authToken);
+
+    await axios
+      .delete(`${API}/account/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        toast.success("Account deleted successfully.", {
+          containerId: "toast-notify",
+        });
+        getUsersAccounts();
+      })
+      .catch((err) => {
+        toast.error("Error deleting account.", {
+          containerId: "toast-notify",
+        });
+        console.log({ err });
+      });
+  };
+
+  const startEditing = async (id) => {
+    const token = JSON.parse(authToken);
+
+    const accountData = {
+      account_name: accountName,
+      account_type: accountType,
+      account_balance: accountBalance,
+      account_note: accountNote,
+      userId: authUser.id,
+    };
+
+    await axios
+      .get(`${API}/account/${id}`, accountData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        const account = res.data.payload;
+        setAccountID(id);
+        setAccountName(account.account_name);
+        setAccountType(account.account_type);
+        setAccountBalance(account.account_balance);
+        setAccountNote(account.account_note);
+        setShowModal(true);
+      })
+      .catch((err) => {
+        toast.error("Error fetching account details.", {
+          containerId: "toast-notify",
+        });
+        console.log({ err });
+      });
+  };
+
+  const saveEdit = () => {};
+
+  const cancelEdit = () => {
+    setEditValue("");
+  };
+
   return (
     <div className="sidebar-content">
       <h4>{authUser.username} Account Overview</h4>
@@ -159,8 +225,8 @@ export const UsersSidebar = () => {
             <span>No account data</span>
           </div>
         ) : (
-          accounts.map((account, index) => (
-            <div className="sidebar-account" key={index}>
+          accounts.map((account) => (
+            <div className="sidebar-account" key={account.id}>
               <span className="account-overview-item">
                 Positive <span>+$100</span>
               </span>
@@ -179,7 +245,7 @@ export const UsersSidebar = () => {
       <h4>Manage Accounts</h4>
       <div className="sidebar-manage-accounts">
         <FaPlus
-          className="sidebar-add-account-button"
+          className="sidebar-add-account-button-user"
           onClick={handleModalOpen}
         />
 
@@ -189,11 +255,53 @@ export const UsersSidebar = () => {
               <span>No accounts</span>
             </div>
           ) : (
-            accounts.map((account, index) => (
-              <div className="sidebar-account" key={index}>
-                <span className="manage-accounts-item">
-                  {account.account_name}
-                </span>
+            accounts.map((account) => (
+              <div className="sidebar-account" key={account.id}>
+                <MdDelete
+                  style={{ color: "red", fontSize: "30px", cursor: "pointer" }}
+                  onClick={() => deleteAccount(account.id)}
+                />
+                {editIndex === index ? (
+                  <input
+                    type="text"
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    style={{ flex: 1 }}
+                  />
+                ) : (
+                  <span className="manage-accounts-item">
+                    {account.account_name}
+                  </span>
+                )}
+                {editIndex === index ? (
+                  <>
+                    <Button
+                      variant="success"
+                      size="sm"
+                      onClick={saveEdit}
+                      style={{ marginLeft: "10px" }}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={cancelEdit}
+                      style={{ marginLeft: "5px" }}
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                ) : (
+                  <FaEdit
+                    style={{
+                      color: "blue",
+                      fontSize: "30px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => startEditing(account.id)}
+                  />
+                )}
               </div>
             ))
           )}

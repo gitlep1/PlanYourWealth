@@ -38,7 +38,19 @@
     .sidebar-add-account-button {
       position: absolute;
       left: 0;
-      font-size: 3rem;
+      font-size: 1.5em;
+      background-color: #007bff;
+
+      &:hover {
+        cursor: pointer;
+        background-color: #0033ff;
+      }
+    }
+
+    .sidebar-add-account-button-user {
+      position: absolute;
+      left: 0;
+      font-size: 2em;
       background-color: #007bff;
 
       &:hover {

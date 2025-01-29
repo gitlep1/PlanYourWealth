@@ -12,11 +12,11 @@ const {
 const { checkIfUserExistsByEmail } = require("../Queries/usersQueries");
 
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: 2525,
+  host: process.env.GMAIL_HOST,
+  port: 587,
   auth: {
-    user: process.env.USER,
-    pass: process.env.PASS,
+    user: process.env.EMAIL,
+    pass: process.env.EMAIL_PW,
   },
 });
 

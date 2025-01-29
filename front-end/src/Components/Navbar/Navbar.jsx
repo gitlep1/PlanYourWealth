@@ -19,6 +19,8 @@ import { NavbarDesktop } from "./Navbar-Desktop/Navbar-Desktop";
 const API = import.meta.env.VITE_PUBLIC_API_BASE;
 
 export const Navbar = () => {
+  const navigate = useNavigate();
+
   const screenVersion = useContext(screenVersionContext);
   const { themeState, setThemeState } = useContext(themeContext);
   const { authUser, setAuthUser } = useContext(userContext);
@@ -82,44 +84,46 @@ export const Navbar = () => {
         });
       }
 
+      // await axios
+      //   .post(`${API}/users/signup`, userData)
+      //   .then((res) => {
+      //     toast.success(
+      //       `Welcome ${res.data.payload.username}, You have been signed up successfully.`,
+      //       {
+      //         containerId: "toast-notify",
+      //       }
+      //     );
+      //     setAuthUser(res.data.payload);
+      //     setAuthToken(res.data.token);
+
+      //     SetCookies("authUser", res.data.payload, 30);
+      //     SetCookies("authToken", res.data.token, 30);
+
+      //     handleClose();
+      //   })
+      //   .catch((error) => {
+      //     return toast.error(`Sign up failed: ${error.response.data.error}`, {
+      //       containerId: "toast-notify",
+      //     });
+      //   });
+
       await axios
-        .post(`${API}/users/signup`, userData)
+        .post(`${API}/email/send-verification`, userData)
         .then((res) => {
-          toast.success(
-            `Welcome ${res.data.payload.username}, You have been signed up successfully.`,
-            {
-              containerId: "toast-notify",
-            }
-          );
-          setAuthUser(res.data.payload);
-          setAuthToken(res.data.token);
-
-          SetCookies("authUser", res.data.payload, 30);
-          SetCookies("authToken", res.data.token, 30);
-
           handleClose();
+          navigate("/verify-email", {
+            state: {
+              email: email,
+              username: username,
+              password: password,
+            },
+          });
         })
-        .catch((error) => {
-          return toast.error(`Sign up failed: ${error.response.data.error}`, {
+        .catch((err) => {
+          return toast.error(err.response.data.error, {
             containerId: "toast-notify",
           });
         });
-
-      // await axios
-      //   .post(`${API}/email/send-verification`, userData)
-      //   .then((res) => {
-      //     handleClose();
-      //     navigate("/verify-email", {
-      //       state: {
-      //         email: email,
-      //         username: username,
-      //         password: password,
-      //       },
-      //     });
-      //   })
-      //   .catch((err) => {
-      //     setError(err.response.data.error);
-      //   });
     }
   };
 
