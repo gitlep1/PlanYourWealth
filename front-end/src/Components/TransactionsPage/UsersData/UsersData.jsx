@@ -17,6 +17,8 @@ import { FaMinus } from "react-icons/fa";
 import { Expenses } from "./Expenses";
 import { Incomes } from "./Income";
 
+import { StockMarket } from "./StockMarket";
+
 const API = import.meta.env.VITE_PUBLIC_API_BASE;
 
 export const UsersTransactionsPage = () => {
@@ -624,6 +626,10 @@ export const UsersTransactionsPage = () => {
           </Table>
         </div>
       </div>
+
+      {/* <div>
+        <StockMarket />
+      </div> */}
 
       {renderModal()}
     </div>

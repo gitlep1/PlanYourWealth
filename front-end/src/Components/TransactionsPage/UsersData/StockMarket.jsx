@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { Table } from "react-bootstrap";
 import { fetchStockData } from "../UsersData/fetchStockData";
 
-const StockMarket = () => {
+export const StockMarket = () => {
   const [stocks, setStocks] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -41,11 +42,11 @@ const StockMarket = () => {
 
   return (
     <div className="stock-market">
-      <h3>Top 5 Daily Stocks</h3>
+      <h3>Stock Market Overview</h3>
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <table>
+        <Table striped bordered hover>
           <thead>
             <tr>
               <th>Stock</th>
@@ -67,10 +68,8 @@ const StockMarket = () => {
               </tr>
             ))}
           </tbody>
-        </table>
+        </Table>
       )}
     </div>
   );
 };
-
-export default StockMarket;

@@ -60,9 +60,10 @@
     }
 
     .sidebar-accounts {
-      display: grid;
+      // border: 3px solid red;
+      display: flex;
+      justify-content: space-evenly;
       margin-top: 3em;
-      gap: 1em;
     }
   }
 }

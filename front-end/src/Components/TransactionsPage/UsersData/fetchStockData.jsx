@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_KEY = import.meta.env.API_KEY_AV;
+const API_KEY = import.meta.env.VITE_API_KEY_AV;
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const fetchStockData = async (symbol) => {
