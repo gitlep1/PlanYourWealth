@@ -600,7 +600,7 @@ export const UsersTransactionsPage = () => {
         </div>
 
         <div className="stock-market">
-          <h3>Stock Market Overview</h3>
+          <h3>(WIP) Stock Market Overview (Not Live)</h3>
           <Table striped bordered hover>
             <thead>
               <tr>
