@@ -39,14 +39,6 @@ export const UsersTransactionsPage = () => {
   const [incomeTransactions, setIncomeTransactions] = useState([]);
   const [error, setError] = useState(null);
 
-  const stockData = [
-    { name: "AAPL", change: 2.3 },
-    { name: "TSLA", change: 1.8 },
-    { name: "AMZN", change: 0.9 },
-    { name: "GOOG", change: -1.2 },
-    { name: "MSFT", change: -0.8 },
-  ];
-
   useEffect(() => {
     getUsersTransactions();
   }, [transactionType]);
@@ -599,35 +591,6 @@ export const UsersTransactionsPage = () => {
           </Table>
         </div>
 
-        <div className="stock-market">
-          <h3>(WIP) Stock Market Overview (Not Live)</h3>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Stock</th>
-                <th>Change (%)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stockData.map((stock, index) => (
-                <tr
-                  key={index}
-                  className={stock.change > 0 ? "positive" : "negative"}
-                >
-                  <td>{stock.name}</td>
-                  <td>
-                    {stock.change > 0
-                      ? `+${stock.change}%`
-                      : `${stock.change}%`}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
-      </div>
-
-      <div>
         <StockMarket />
       </div>
 

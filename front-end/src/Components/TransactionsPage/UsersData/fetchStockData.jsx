@@ -21,7 +21,6 @@ export const fetchStockData = async (symbol) => {
       ),
     };
   } catch (error) {
-    console.error("Error fetching stock data:", error);
-    return null;
+    return "Error fetching stock data:", error;
   }
 };
