@@ -627,9 +627,9 @@ export const UsersTransactionsPage = () => {
         </div>
       </div>
 
-      {/* <div>
+      <div>
         <StockMarket />
-      </div> */}
+      </div>
 
       {renderModal()}
     </div>

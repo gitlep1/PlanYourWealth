@@ -1,4 +1,4 @@
-const db = require("../db/dbConfig.js");
+const { db } = require("../db/dbConfig.js");
 
 const createEmailVerification = async (email, code) => {
   const query =
