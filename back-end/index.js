@@ -46,11 +46,10 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 
-app.use("/email", emailAuthController);
-
-app.use("/users", usersController);
-app.use("/transactions", transactionsController);
-app.use("/accounts", accountsController);
+app.use("/api/email", emailAuthController);
+app.use("/api/users", usersController);
+app.use("/api/transactions", transactionsController);
+app.use("/api/accounts", accountsController);
 
 app.get("/", (req, res) => {
   res.send("Welcome to PlanYourWealth Server");
