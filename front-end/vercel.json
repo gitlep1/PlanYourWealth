@@ -1,14 +1,14 @@
 {
   "builds": [
     {
-      "src": "/dist/**",
+      "src": "index.html",
       "use": "@vercel/vite"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/dist/index.html"
+      "dest": "index.html"
     }
   ]
 }
