@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:4000",
+        target: "https://plan-your-wealth-api.vercel.app",
         changeOrigin: true,
         secure: false,
       },
